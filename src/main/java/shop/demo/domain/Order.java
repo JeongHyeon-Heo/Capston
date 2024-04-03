@@ -10,8 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "orders")
 @Getter @Setter
 public class Order {
+
     @Id @GeneratedValue
     @Column(name = "order_id")
     private Long id;
