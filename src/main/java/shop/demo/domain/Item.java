@@ -20,8 +20,18 @@ public class Item {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    private Long price;
+    private int price;
+    private int stockQuantity;
 
-    private Long stockQuantity;
+
+    public void addStock(int quantity){
+        this.stockQuantity += quantity;
+    }
+
+    public void removeStock(int quantity){
+        int restStock = this.stockQuantity - quantity;
+        this.stockQuantity = restStock;
+    }
+
 
 }
