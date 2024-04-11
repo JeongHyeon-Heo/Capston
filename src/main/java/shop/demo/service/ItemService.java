@@ -1,10 +1,10 @@
-package shop.demo.domain.service;
+package shop.demo.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.demo.domain.Item;
-import shop.demo.domain.repository.ItemRepository;
+import shop.demo.repository.ItemRepository;
 
 import java.awt.print.Book;
 import java.util.List;

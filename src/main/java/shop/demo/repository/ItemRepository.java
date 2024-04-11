@@ -1,4 +1,4 @@
-package shop.demo.domain.repository;
+package shop.demo.repository;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
