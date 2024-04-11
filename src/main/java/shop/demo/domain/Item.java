@@ -23,6 +23,7 @@ public class Item {
     private int price;
     private int stockQuantity;
 
+
     public void addStock(int quantity){
         this.stockQuantity += quantity;
     }
@@ -31,5 +32,6 @@ public class Item {
         int restStock = this.stockQuantity - quantity;
         this.stockQuantity = restStock;
     }
+
 
 }
