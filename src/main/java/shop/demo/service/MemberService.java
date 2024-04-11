@@ -1,7 +1,7 @@
-package shop.demo.Service;
+package shop.demo.service;
 
 import org.springframework.stereotype.Service;
-import shop.demo.Repository.MemberRepository;
+import shop.demo.repository.MemberRepository;
 import shop.demo.domain.Member;
 
 import java.util.List;
