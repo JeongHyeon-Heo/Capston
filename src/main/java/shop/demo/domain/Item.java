@@ -22,6 +22,6 @@ public class Item {
 
     private Long price;
 
-    private Long inventory;
+    private Long stockQuantity;
 
 }
