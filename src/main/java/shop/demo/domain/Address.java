@@ -18,4 +18,7 @@ public class Address {
     private Long zipcode;
 
     private String detail;
+
+
+
 }

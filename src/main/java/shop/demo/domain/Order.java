@@ -59,9 +59,8 @@ public class Order {
         payment.setOrder(this);
     }
 
-    /*
-    //==생성 메서드==//
-    public static Order createOrder(Member member, Address address, Payment payment,OrderItem... orderItems) {
+
+    public static Order createOrder(Member member, Address address, Payment payment,List<OrderItem> orderItems) {
         Order order = new Order();
         order.setMember(member);
         order.setAddress(address);
@@ -71,6 +70,6 @@ public class Order {
         }
         order.setDate(LocalDateTime.now());
         return order;
-    }*/
+    }
 
 }
