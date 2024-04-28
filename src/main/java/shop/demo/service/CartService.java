@@ -25,7 +25,7 @@ public class CartService {
     public Long addCart(Long MemberID, Long ItemID, Long quantity){
 
         Member member = memberRepository.findOne(MemberID);
-        Item item = itemRepository.findOne(ItemID);
+        Item item = itemRepository.findItemById(ItemID);
 
         Cart cart = Cart.createcart(member,item,quantity);
 
