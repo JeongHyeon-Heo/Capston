@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter @Setter
 public class Cart {
@@ -20,5 +22,20 @@ public class Cart {
     @JoinColumn(name = "item_id")
     private Item item;
 
+    private Long quantity;
 
+
+    public void setMember(Member member) {
+        this.member = member;
+        member.getCarts().add(this);
+    }
+
+    public static Cart createcart(Member member, Item item, Long quantity) {
+        Cart cart = new Cart();
+        cart.setMember(member);
+        cart.setItem(item);
+        cart.setQuantity(quantity);
+
+        return cart;
+    }
 }
