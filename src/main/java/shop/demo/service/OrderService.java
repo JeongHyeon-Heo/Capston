@@ -64,6 +64,7 @@ public class OrderService {
         return order.getId();
     }
 
+    @Transactional
     public void removeOrder(Long memberID) {
         List<Order> orders = orderRepository.findByMember(memberID);
         for (Order order : orders) {
