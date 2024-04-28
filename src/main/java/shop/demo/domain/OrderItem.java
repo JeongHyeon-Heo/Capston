@@ -1,7 +1,9 @@
 package shop.demo.domain;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
@@ -19,5 +21,15 @@ public class OrderItem {
     @JoinColumn(name = "item_id")
     private Item item;
 
-    private Long quantity;
+    private int quantity;
+
+    public static OrderItem createOrderItem(Item item, int quantity) {
+        OrderItem orderItem = new OrderItem();
+        orderItem.setItem(item);
+        orderItem.setQuantity(quantity);
+        item.removeStock(quantity);
+        return orderItem;
+    }
+
+
 }

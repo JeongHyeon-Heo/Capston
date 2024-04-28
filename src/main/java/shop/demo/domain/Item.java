@@ -21,6 +21,7 @@ public class Item {
     private Category category;
 
     private int price;
+
     private int stockQuantity;
 
 
