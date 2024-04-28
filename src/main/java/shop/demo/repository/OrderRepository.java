@@ -9,9 +9,7 @@ import java.util.List;
 
 @Repository
 public class OrderRepository {
-
     private final EntityManager em;
-
 
 
     public OrderRepository(EntityManager em) {

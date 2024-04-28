@@ -4,12 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import shop.demo.domain.Item;
+import shop.demo.domain.Category;
 import shop.demo.service.ItemService;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/item")
+@RequestMapping("/items")
 @RequiredArgsConstructor
 public class ItemController {
     private final ItemService itemService;
@@ -39,6 +40,13 @@ public class ItemController {
         }
     }
 
+    //카테고리별 상품 조회
+    @GetMapping("/category/{category}")
+    public ResponseEntity<List<Item>> getItemsByCategory(@PathVariable Category category) {
+        List<Item> items = itemService.getItemsByCategory(category);
+        return ResponseEntity.ok(items);
+    }
+
     //상품 업데이트
     @PutMapping("/{itemId}")
     public ResponseEntity<String> updateItem(@PathVariable Long itemId, @RequestBody Item newItem) {
@@ -55,4 +63,5 @@ public class ItemController {
             return ResponseEntity.notFound().build(); //상품이 존재하지 않는 경우 404 상태 코드를 반환
         }
     }
+
 }

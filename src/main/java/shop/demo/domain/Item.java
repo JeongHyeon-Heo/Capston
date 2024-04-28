@@ -21,14 +21,9 @@ public class Item {
 
     private int stockQuantity; //재고량
 
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
-    private Category category;
-
-
-    private int price;
-
-    private int stockQuantity;
+    @Enumerated(EnumType.STRING)
+    private Category category; //카테고리
 
 
     public void addStock(int quantity){

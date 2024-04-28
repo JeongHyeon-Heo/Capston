@@ -24,7 +24,6 @@ public class Cart {
 
     private Long quantity;
 
-
     public void setMember(Member member) {
         this.member = member;
         member.getCarts().add(this);

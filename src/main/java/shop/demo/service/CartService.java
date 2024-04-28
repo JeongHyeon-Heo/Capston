@@ -25,7 +25,7 @@ public class CartService {
     public Long addCart(Long MemberID, Long ItemID, Long quantity){
 
         Member member = memberRepository.findOne(MemberID);
-        Item item = itemRepository.findOne(ItemID);
+        Item item = itemRepository.findItemById(ItemID);
 
         Cart cart = Cart.createcart(member,item,quantity);
 
@@ -43,7 +43,6 @@ public class CartService {
         for (Cart cart : carts) {
             cartRepository.delete(cart);
         }
-
     }
 
     public List<Cart> ViewAllCart(Long MemberID) {

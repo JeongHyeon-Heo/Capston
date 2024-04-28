@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.demo.domain.Item;
+import shop.demo.domain.Category;
 import shop.demo.repository.ItemRepository;
 
 import java.util.List;
@@ -29,6 +30,11 @@ public class ItemService {
     //특정 상품 조회
     public Item findOne(Long itemId){
         return itemRepository.findItemById(itemId);
+    }
+
+    //카테고리별 상품 조회
+    public List<Item> getItemsByCategory(Category category) {
+        return itemRepository.findByCategory(category);
     }
 
     //상품 업데이트
