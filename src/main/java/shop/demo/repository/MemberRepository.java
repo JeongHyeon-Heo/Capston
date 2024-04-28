@@ -1,4 +1,4 @@
-package shop.demo.Repository;
+package shop.demo.repository;
 
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;

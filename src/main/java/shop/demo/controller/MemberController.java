@@ -1,8 +1,8 @@
-package shop.demo.Controller;
+package shop.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import shop.demo.Service.MemberService;
+import shop.demo.service.MemberService;
 import shop.demo.domain.Member;
 
 import java.util.List;
