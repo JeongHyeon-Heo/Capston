@@ -28,19 +28,31 @@ public class Member {
 
     private LocalDateTime registrationDate;
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "member")
+
+    @OneToMany(mappedBy = "member",cascade = CascadeType.ALL)
     private List<Order> orders = new ArrayList<>();
 
-    @JsonManagedReference
+
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Cart> carts = new ArrayList<>();
 
-    @JsonManagedReference
+
     @OneToMany(mappedBy = "member")
     private List<Notification> notifications = new ArrayList<>();
 
-    @JsonManagedReference
+
     @OneToMany(mappedBy = "member")
     private List<ServiceCenter> serviceCenters = new ArrayList<>();
+
+
+    public static Member createMember(String name, String email, String password, LocalDateTime registrationDate) {
+        Member member = new Member();
+        member.setName(name);
+        member.setEmail(email);
+        member.setPassword(password);
+        member.setRegistrationDate(registrationDate);
+
+        return member;
+    }
+
 }

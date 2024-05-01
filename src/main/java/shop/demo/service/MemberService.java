@@ -3,10 +3,16 @@ package shop.demo.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import shop.demo.domain.Cart;
+import shop.demo.domain.Order;
+import shop.demo.dto.MemberDTO;
+import shop.demo.dto.MemberInfoDTO;
 import shop.demo.repository.MemberRepository;
 import shop.demo.domain.Member;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -14,21 +20,50 @@ import java.util.List;
 public class MemberService {
     private final MemberRepository memberRepository;
 
-    public void saveMember(Member member) {
+    @Transactional
+    public void saveMember(MemberDTO memberDTO) {
+        Member member = new Member();
+        member.setName(memberDTO.getName());
+        member.setEmail(memberDTO.getEmail());
+        member.setPassword(memberDTO.getPassword());
+        member.setRegistrationDate(LocalDateTime.now());
         memberRepository.save(member);
     }
 
-    public Member findMemberById(Long id) {
-        return memberRepository.findOne(id);
-    }
+//    public Member findMemberById(Long id) {
+//        return memberRepository.findOne(id);
+//    }
+public MemberInfoDTO findMemberById(Long id) {
+    Member member = memberRepository.findOne(id);
 
-    public List<Member> findAllMembers() {
-        return memberRepository.findAll();
+    /* 수정 */
+    if (member != null) {
+        MemberInfoDTO memberInfoDTO = new MemberInfoDTO();
+        List<Long> orderIds = member.getOrders().stream().map(Order::getId).collect(Collectors.toList());
+        memberInfoDTO.setOrders(orderIds);
+        List<Long> cartIds = member.getCarts().stream().map(Cart::getId).collect(Collectors.toList());
+        memberInfoDTO.setCarts(cartIds);
+/* 수정 */
+//        memberInfoDTO.setOrders(member.getOrders());
+//        memberInfoDTO.setCarts(member.getCarts());
+        memberInfoDTO.setName(member.getName());
+        memberInfoDTO.setEmail(member.getEmail());
+        memberInfoDTO.setDate(member.getRegistrationDate());
+        return memberInfoDTO;
+    } else {
+        return null; // 또는 예외 처리를 수행할 수도 있습니다.
     }
+}
+
+//    public List<Member> findAllMembers() {
+//        return memberRepository.findAll();
+//    }
 
     public List<Member> findMembersByName(String name) {
         return memberRepository.findByName(name);
     }
+
+    @Transactional
     public boolean deleteMemberById(Long id) {
         if (memberRepository.existsById(id)) {
             memberRepository.deleteById(id);
