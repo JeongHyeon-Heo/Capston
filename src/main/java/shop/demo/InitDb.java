@@ -99,7 +99,7 @@ public class InitDb {
             item.setName("상의1");
             item.setPrice(1000);
             item.setStockQuantity(3);
-            //item.setCategory("");
+            item.setCategory(Category.valueOf("TOP"));
             return item;
         }
 
