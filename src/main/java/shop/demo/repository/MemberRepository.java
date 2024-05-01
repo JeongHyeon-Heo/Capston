@@ -32,4 +32,16 @@ public class MemberRepository {
                 .getResultList();
     }
 
+    public void deleteById(Long id) {
+        Member member = em.find(Member.class, id);
+        if (member != null) {
+            em.remove(member);
+        }
+    }
+
+    public boolean existsById(Long id) {
+        Member member = em.find(Member.class, id);
+        return member != null;
+    }
 }
+

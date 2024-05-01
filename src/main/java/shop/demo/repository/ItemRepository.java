@@ -9,19 +9,28 @@ import java.util.List;
 @Repository
 @RequiredArgsConstructor
 public class ItemRepository{
-    private final EntityManager em;
-    public void save(Item item){
-        if(item.getId() == null){
-            em.persist(item);
-        }else{
-            em.merge(item);
+    private final EntityManager entityManager;
+
+    public void save(Item item) {
+        if (item.getId() == null) {
+            entityManager.persist(item); //새로운 아이템을 추가시 persist 사용
+        } else {
+            entityManager.merge(item); //이미 존재하는 아이템 업데이트시 merge 사용
         }
     }
-    public Item findOne(Long id){
-        return em.find(Item.class, id);
-    }
-    public List<Item> findAll(){
-        return em.createQuery("select i from Item i", Item.class).getResultList();
+
+    public Item findItemById(Long id){
+        return entityManager.find(Item.class, id);
     }
 
+    public List<Item> findAll(){
+        return entityManager.createQuery("select i from Item i", Item.class).getResultList();
+    }
+
+    public void deleteById(Long id) {
+        Item item = findItemById(id);
+        if (item != null) {
+            entityManager.remove(item);
+        }
+    }
 }
