@@ -46,24 +46,40 @@ public class InitDb {
             Member member = createMember("userA");
             em.persist(member);
 
-            Item cloth = createItem();
-            em.persist(cloth);
+            Item cloth1 = createItem();
+            Item cloth2 = createItem();
+            em.persist(cloth1);
+            em.persist(cloth2);
 
 
+            Cart cart1 = Cart.createcart(member,cloth1, 1L);
+            Cart cart2 = Cart.createcart(member,cloth2, 1L);
 
-            OrderItem orderItem1 = OrderItem.createOrderItem(cloth, 1);
+            OrderItem orderItem1 = OrderItem.createOrderItem(cloth1, 1);
+            OrderItem orderItem2 = OrderItem.createOrderItem(cloth2, 2);
+            OrderItem orderItem3 = OrderItem.createOrderItem(cloth2, 2);
 
-            List<OrderItem> orderItems = new ArrayList<>();
-            orderItems.add(orderItem1);
+            List<OrderItem> orderItems1 = new ArrayList<>();
+            orderItems1.add(orderItem1);
+            orderItems1.add(orderItem2);
 
-            Address address = createAddress(1L,"주소1");
-            Payment payment = createPayment(1L,1000L);
-
-            Order order = Order.createOrder(member, address,payment ,orderItems);
-
+            List<OrderItem> orderItems2 = new ArrayList<>();
+            orderItems2.add(orderItem3);
 
 
-            em.persist(order);
+            Address address1 = createAddress(1L,"주소1");
+            Address address2 = createAddress(1L,"주소1");
+            Address address3 = createAddress(1L,"주소1");
+            Payment payment1 = createPayment(1L,1000L);
+            Payment payment2 = createPayment(1L,1000L);
+            Payment payment3 = createPayment(1L,1000L);
+
+            Order order1 = Order.createOrder(member, address1 ,payment1 ,orderItems1);
+            Order order2 = Order.createOrder(member, address2 ,payment2 ,orderItems2);
+
+
+            em.persist(order1);
+            em.persist(order2);
         }
 
 

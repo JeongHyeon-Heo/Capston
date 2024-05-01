@@ -32,12 +32,15 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<Order> orders = new ArrayList<>();
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Cart> carts = new ArrayList<>();
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "member")
     private List<Notification> notifications = new ArrayList<>();
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "member")
     private List<ServiceCenter> serviceCenters = new ArrayList<>();
 }
