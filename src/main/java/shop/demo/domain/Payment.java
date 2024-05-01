@@ -15,6 +15,7 @@ public class Payment {
     @Column(name = "payment_id")
     private Long id;
 
+
     @OneToOne(mappedBy = "payment", fetch = FetchType.LAZY)
     private Order order;
 

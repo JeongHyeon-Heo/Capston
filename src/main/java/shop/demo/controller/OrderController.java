@@ -2,10 +2,10 @@ package shop.demo.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
+
 import org.springframework.web.bind.annotation.*;
 import shop.demo.domain.Order;
+import shop.demo.dto.OrderDTO;
 import shop.demo.service.OrderService;
 
 import java.util.List;
@@ -16,7 +16,7 @@ import java.util.List;
 public class OrderController {
 
     private final OrderService orderService;
-
+/*
     @GetMapping("/orders/member")
     public ResponseEntity<List<Order>> getOrdersByMemberId(@AuthenticationPrincipal UserDetails userDetails) {
         Long memberId = Long.parseLong(userDetails.getUsername());
@@ -38,6 +38,28 @@ public class OrderController {
     public ResponseEntity<Void> removeOrder(@AuthenticationPrincipal UserDetails userDetails) {
         Long memberId = Long.parseLong(userDetails.getUsername());
         orderService.removeOrder(memberId);
+        return ResponseEntity.noContent().build();
+    }
+*/
+
+    @GetMapping("/member/{memberId}")
+    public ResponseEntity<List<OrderDTO>> getOrdersByMemberId(@PathVariable Long memberId) {
+        List<OrderDTO> orderDTOs = orderService.viewOrdersByMemberId(memberId);
+        return ResponseEntity.ok(orderDTOs);
+    }
+
+    @PostMapping("/add/{memberId}")
+    public ResponseEntity<Long> addOrderFromCart(@PathVariable Long memberId,
+                                                 @RequestParam Long zipcode,
+                                                 @RequestParam String detail,
+                                                 @RequestParam Long cardnum) {
+        Long orderId = orderService.addorderfromcart(memberId, zipcode, detail, cardnum);
+        return ResponseEntity.ok(orderId);
+    }
+
+    @DeleteMapping("/remove/{orderid}")
+    public ResponseEntity<Void> removeOrder(@PathVariable Long orderid) {
+        orderService.removeOrder(orderid);
         return ResponseEntity.noContent().build();
     }
 }
