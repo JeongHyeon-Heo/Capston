@@ -87,6 +87,7 @@ public class InitDb {
         private Member createMember(String name) {
             Member member = new Member();
             member.setName(name);
+
             member.setDate(LocalDateTime.now());
             member.setEmail("hansung.ac.kr");
             member.setPassword("1234");
@@ -123,3 +124,4 @@ public class InitDb {
 
     }
 }
+

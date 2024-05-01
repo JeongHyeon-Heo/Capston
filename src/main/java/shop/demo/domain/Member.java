@@ -26,6 +26,7 @@ public class Member {
 
     private String password;
 
+
     private LocalDateTime date;
 
     @JsonManagedReference
@@ -41,6 +42,19 @@ public class Member {
     private List<Notification> notifications = new ArrayList<>();
 
     @JsonManagedReference
+
     @OneToMany(mappedBy = "member")
     private List<ServiceCenter> serviceCenters = new ArrayList<>();
+
+
+    public static Member createMember(String name, String email, String password, LocalDateTime registrationDate) {
+        Member member = new Member();
+        member.setName(name);
+        member.setEmail(email);
+        member.setPassword(password);
+        member.setRegistrationDate(registrationDate);
+
+        return member;
+    }
+
 }
