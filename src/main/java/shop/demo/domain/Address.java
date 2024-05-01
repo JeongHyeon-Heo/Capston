@@ -12,6 +12,7 @@ public class Address {
     @Column(name = "address_id")
     private Long id;
 
+
     @OneToOne(mappedBy = "address", fetch = FetchType.LAZY)
     private Order order;
 

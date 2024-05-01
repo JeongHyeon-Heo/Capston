@@ -5,7 +5,6 @@ import org.springframework.stereotype.Repository;
 
 import shop.demo.domain.Cart;
 import shop.demo.domain.Member;
-import shop.demo.domain.Order;
 
 import java.util.List;
 
@@ -23,10 +22,22 @@ public class CartRepository {
 
     public void delete(Cart cart) {em.remove(cart);}
 
+    public void flush() {em.flush();}
+
+
     public Cart findById(Long id) {return em.find(Cart.class, id);}
 
     public List<Cart> findBymember(Long memberId){
         Member member = em.find(Member.class, memberId);
         return member.getCarts();
     }
+
+    public void deleteCustomerCart(Member member) {
+        String hql = "delete from Cart where member = :member";
+        em.createQuery(hql).setParameter("member", member).executeUpdate();
+    }
+
+
+
+
 }
