@@ -45,7 +45,6 @@ public class OrderController {
     @GetMapping("/member/{memberId}")
     public ResponseEntity<List<OrderDTO>> getOrdersByMemberId(@PathVariable Long memberId) {
         List<OrderDTO> orderDTOs = orderService.viewOrdersByMemberId(memberId);
-//        List<OrderDTO> orderDTOs = orderService.viewOrdersByMemberId(memberId);
         return ResponseEntity.ok(orderDTOs);
     }
 

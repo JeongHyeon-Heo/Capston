@@ -26,20 +26,22 @@ public class Member {
 
     private String password;
 
-    private LocalDateTime registrationDate;
 
+    private LocalDateTime date;
 
-    @OneToMany(mappedBy = "member",cascade = CascadeType.ALL)
+    @JsonManagedReference
+    @OneToMany(mappedBy = "member")
     private List<Order> orders = new ArrayList<>();
 
-
+    @JsonManagedReference
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Cart> carts = new ArrayList<>();
 
-
+    @JsonManagedReference
     @OneToMany(mappedBy = "member")
     private List<Notification> notifications = new ArrayList<>();
 
+    @JsonManagedReference
 
     @OneToMany(mappedBy = "member")
     private List<ServiceCenter> serviceCenters = new ArrayList<>();

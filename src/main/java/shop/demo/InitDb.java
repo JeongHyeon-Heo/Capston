@@ -87,7 +87,8 @@ public class InitDb {
         private Member createMember(String name) {
             Member member = new Member();
             member.setName(name);
-            member.setRegistrationDate(LocalDateTime.now());
+
+            member.setDate(LocalDateTime.now());
             member.setEmail("hansung.ac.kr");
             member.setPassword("1234");
             return member;
@@ -102,21 +103,21 @@ public class InitDb {
             return item;
         }
 
-        private Address createAddress(Long zipcode, String detail ) {
-            Address address = new Address();
-            address.setZipcode(zipcode);
-            address.setDetail(detail);
-            return address;
-        }
+            private Address createAddress(Long zipcode, String detail ) {
+                Address address = new Address();
+                address.setZipcode(zipcode);
+                address.setDetail(detail);
+                return address;
+            }
 
-        private Payment createPayment(Long cardnum ,Long amount) {
+            private Payment createPayment(Long cardnum ,Long amount) {
 
-            Payment payment = new Payment();
-            payment.setCardnumber(cardnum);
-            payment.setAmountpay(amount);
-            payment.setDate(LocalDateTime.now());
-            return payment;
-        }
+                Payment payment = new Payment();
+                payment.setCardnumber(cardnum);
+                payment.setAmountpay(amount);
+                payment.setDate(LocalDateTime.now());
+                return payment;
+            }
 
 
 
