@@ -2,9 +2,11 @@ package shop.demo.service;
 
 
 import lombok.RequiredArgsConstructor;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.demo.domain.*;
+import shop.demo.dto.OrderDTO;
 import shop.demo.repository.CartRepository;
 import shop.demo.repository.ItemRepository;
 import shop.demo.repository.MemberRepository;
@@ -13,6 +15,7 @@ import shop.demo.repository.OrderRepository;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -24,9 +27,23 @@ public class OrderService {
     private final ItemRepository itemRepository;
     private final CartRepository cartRepository;
 
-
+/*
     public List<Order> viewOrdersByMemberId(Long memberId) {
         return orderRepository.findByMember(memberId);
+    }*/
+
+    public List<OrderDTO> viewOrdersByMemberId(Long memberId) {
+        List<Order> orders = orderRepository.findByMember(memberId);
+        return orders.stream()
+                .map(order -> new OrderDTO(order.getId(),
+                        order.getMember().getId(),
+                        order.getAddress().getId(),
+                        order.getPayment().getId(),
+                        order.getOrderItems().stream()
+                                .map(OrderItem::getId)
+                                .collect(Collectors.toList()),
+                        order.getDate()))
+                .collect(Collectors.toList());
     }
 
 
@@ -64,12 +81,18 @@ public class OrderService {
         return order.getId();
     }
 
+    /*
     @Transactional
-    public void removeOrder(Long memberID) {
+    public void removeOrderbymember(Long memberID) {
         List<Order> orders = orderRepository.findByMember(memberID);
         for (Order order : orders) {
             orderRepository.delete(order);
         }
+    }*/
+    @Transactional
+    public void removeOrder(Long orderid) {
+        Order order = orderRepository.findById(orderid);
+        orderRepository.delete(order);
     }
 
 
