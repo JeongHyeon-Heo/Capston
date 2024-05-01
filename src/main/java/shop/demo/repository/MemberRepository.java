@@ -21,10 +21,10 @@ public class MemberRepository {
         return em.find(Member.class, id);
     }
 
-    public List<Member> findAll() {
-        return em.createQuery("select m from Member m", Member.class)
-                .getResultList();
-    }
+//    public List<Member> findAll() {
+//        return em.createQuery("select m from Member m", Member.class)
+//                .getResultList();
+//    }
 
     public List<Member> findByName(String name) {
         return em.createQuery("select m from Member m where m.name = :name", Member.class)
@@ -32,4 +32,16 @@ public class MemberRepository {
                 .getResultList();
     }
 
+    public void deleteById(Long id) {
+        Member member = em.find(Member.class, id);
+        if (member != null) {
+            em.remove(member);
+        }
+    }
+
+    public boolean existsById(Long id) {
+        Member member = em.find(Member.class, id);
+        return member != null;
+    }
 }
+

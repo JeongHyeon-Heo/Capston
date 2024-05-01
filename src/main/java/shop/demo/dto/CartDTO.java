@@ -10,4 +10,6 @@ public class CartDTO {
     private Long memberId;
     private Long itemId;
     private Long quantity;
+
 }
+
