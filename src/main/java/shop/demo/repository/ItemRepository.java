@@ -16,9 +16,9 @@ public class ItemRepository {
     //새로운 아이템 저장하거나 이미 존재하는 아이템을 업데이트
     public void save(Item item) {
         if (item.getId() == null) {
-            em.persist(item); // 새로운 아이템을 추가시 persist 사용
+            em.persist(item); //새로운 아이템을 추가시 persist 사용
         } else {
-            em.merge(item); // 이미 존재하는 아이템 업데이트시 merge 사용
+            em.merge(item); //이미 존재하는 아이템 업데이트시 merge 사용
         }
     }
 

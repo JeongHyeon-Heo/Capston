@@ -11,6 +11,9 @@ import shop.demo.repository.ItemRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
+//상품 조회, 업데이트, 삭제와 관련된 비즈니스 로직 구현
+//ItemDTO와 Item엔티티 간의 변환을 담당하는 메서드를 제공
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -43,15 +46,15 @@ public class ItemService {
         return convertToDTOList(items);
     }
 
-    //상품 업데이트
+    //상품 정보 업데이트
     @Transactional
     public void updateItem(Long itemId, ItemDTO newItemDTO) {
         Item existingItem = itemRepository.findItemById(itemId);
-        if (existingItem != null) {
-            existingItem.setName(newItemDTO.getName());
-            existingItem.setPrice(newItemDTO.getPrice());
+
+        if (existingItem != null && existingItem.getStockQuantity() != newItemDTO.getStockQuantity()) {
             existingItem.setStockQuantity(newItemDTO.getStockQuantity());
-            existingItem.setCategory(newItemDTO.getCategory());
+        } else {
+            throw new IllegalArgumentException("상품 업데이트에 실패했습니다. 수량만 변경 가능합니다.");
         }
     }
 
@@ -66,7 +69,7 @@ public class ItemService {
         return false;
     }
 
-    // ItemDTO를 Item으로 변환하는 메서드
+    //ItemDTO를 Item으로 변환하는 메서드
     private Item convertToItem(ItemDTO itemDTO) {
         Item item = new Item();
         item.setName(itemDTO.getName());
@@ -76,7 +79,7 @@ public class ItemService {
         return item;
     }
 
-    // Item을 ItemDTO로 변환하는 메서드
+    //Item을 ItemDTO로 변환하는 메서드
     private ItemDTO convertToDTO(Item item) {
         ItemDTO dto = new ItemDTO();
         dto.setId(item.getId());
@@ -87,7 +90,7 @@ public class ItemService {
         return dto;
     }
 
-    // Item 리스트를 ItemDTO 리스트로 변환하는 메서드
+    //Item 리스트를 ItemDTO 리스트로 변환하는 메서드
     private List<ItemDTO> convertToDTOList(List<Item> items) {
         return items.stream()
                 .map(this::convertToDTO)
