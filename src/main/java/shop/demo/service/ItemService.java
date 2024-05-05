@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.demo.domain.Item;
 import shop.demo.domain.Category;
+import shop.demo.domain.ItemStatus;
 import shop.demo.dto.ItemDTO;
 import shop.demo.repository.ItemRepository;
 
@@ -41,13 +42,17 @@ public class ItemService {
     }
 
     //카테고리별 상품 조회
-    public List<ItemDTO> getItemsByCategory(Category category) {
+    public List<ItemDTO> getItemsByCategory (Category category) {
         List<Item> items = itemRepository.findByCategory(category);
-        return convertToDTOList(items);
+        //조회된 상품 목록 중에서 재고가 있는 상품만을 필터링하여 새로운 리스트에 저장
+        List<Item> availableItems = items.stream()
+                .filter(item -> item.getStockQuantity() > 0)
+                .collect(Collectors.toList());
+        return convertToDTOList(availableItems);
     }
 
     //상품 정보 업데이트
-    @Transactional
+    /*@Transactional
     public void updateItem(Long itemId, ItemDTO newItemDTO) {
         Item existingItem = itemRepository.findItemById(itemId);
 
@@ -56,6 +61,35 @@ public class ItemService {
         } else {
             throw new IllegalArgumentException("상품 업데이트에 실패했습니다. 수량만 변경 가능합니다.");
         }
+    }*/
+
+    //상품 정보 업데이트
+    @Transactional
+    public void updateItem(Long itemId, ItemDTO newItemDTO) {
+        Item existingItem = itemRepository.findItemById(itemId);
+
+        if (existingItem != null) {
+            int newStockQuantity = newItemDTO.getStockQuantity();
+
+            //재고량이 0인 경우 품절 상태로 설정
+            if (newStockQuantity == 0) {
+                existingItem.setStockQuantity(0);
+                existingItem.setItemStatus(ItemStatus.SOLD_OUT);
+            } else {
+                //재고량이 0보다 큰 경우 상품 상태를 재고 있음으로 설정
+                existingItem.setStockQuantity(newStockQuantity);
+                existingItem.setItemStatus(ItemStatus.AVAILABLE);
+            }
+        } else {
+            throw new IllegalArgumentException("상품 업데이트에 실패했습니다.");
+        }
+    }
+
+    //상품 검색
+    public List<ItemDTO> searchItems(String keyword) {
+        // 검색 키워드를 포함하는 상품 목록 조회
+        List<Item> items = itemRepository.findByKeyword(keyword);
+        return convertToDTOList(items);
     }
 
     //상품 삭제

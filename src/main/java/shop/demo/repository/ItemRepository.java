@@ -39,6 +39,13 @@ public class ItemRepository {
                 .getResultList();
     }
 
+    //주어진 키워드를 포함하는 상품을 검색
+    public List<Item> findByKeyword(String keyword) {
+        return em.createQuery("select i from Item i where i.name LIKE :keyword", Item.class)
+                .setParameter("keyword", "%" + keyword + "%")
+                .getResultList();
+    }
+
     //주어진 ID에 해당하는 아이템을 삭제
     public void deleteById(Long id) {
         Item item = findItemById(id);

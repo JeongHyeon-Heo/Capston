@@ -7,6 +7,9 @@ import shop.demo.dto.ItemDTO;
 import shop.demo.domain.Category;
 import shop.demo.service.ItemService;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @RestController
@@ -52,6 +55,20 @@ public class ItemController {
     public ResponseEntity<String> updateItem(@PathVariable Long itemId, @RequestBody ItemDTO newItemDTO) {
         itemService.updateItem(itemId, newItemDTO);
         return ResponseEntity.ok("상품이 업데이트되었습니다.");
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<ItemDTO>> searchItems(@RequestParam String keyword) {
+        try {
+            // 검색어 URL 디코딩
+            String decodedKeyword = URLDecoder.decode(keyword, StandardCharsets.UTF_8.toString());
+            // 검색어를 포함하는 상품 목록 조회
+            List<ItemDTO> searchResults = itemService.searchItems(decodedKeyword);
+            return ResponseEntity.ok(searchResults);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     //상품 삭제

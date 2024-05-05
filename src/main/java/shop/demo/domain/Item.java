@@ -24,6 +24,9 @@ public class Item {
 
     private int stockQuantity; //재고량
 
+    @Enumerated(EnumType.STRING)
+    private ItemStatus itemStatus; //상품 품절 여부
+
     @JoinColumn(name = "category_id")
     @Enumerated(EnumType.STRING)
     private Category category; //카테고리
@@ -38,10 +41,10 @@ public class Item {
     private List<Cart> carts = new ArrayList<>();
 
 
-    //재고 추가
-    public void addStock(int quantity){
+    //재고 추가 => 품절관리 코드 추가시 크게 사용할 필요가 없어서 일단 주석처리.
+    /*public void addStock(int quantity){
         this.stockQuantity += quantity;
-    }
+    }*/
 
     //재고 감소
     public void removeStock(int quantity){
