@@ -3,13 +3,22 @@ package shop.demo.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 import shop.demo.domain.Item;
 import shop.demo.domain.Category;
 import shop.demo.domain.ItemStatus;
 import shop.demo.dto.ItemDTO;
 import shop.demo.repository.ItemRepository;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 
@@ -101,6 +110,31 @@ public class ItemService {
             return true;
         }
         return false;
+    }
+
+    //상품 이미지 관리
+    public String uploadImage(MultipartFile file) throws IOException {
+        //업로드된 파일 이름에서 공백 제거
+        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        //파일명에 UUID 추가하여 중복 방지
+        fileName = UUID.randomUUID().toString() + "_" + fileName;
+
+        String uploadDir = "src/main/resources/static/images";
+
+        //업로드될 디렉토리가 없는 경우 생성
+        File directory = new File(uploadDir);
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+
+        //파일 저장
+        Path filePath = Paths.get(uploadDir).resolve(fileName);
+        try (OutputStream outputStream = new FileOutputStream(filePath.toString())) {
+            outputStream.write(file.getBytes());
+        }
+
+        //이미지 URL 반환
+        return "/images/" + fileName;
     }
 
     //ItemDTO를 Item으로 변환하는 메서드

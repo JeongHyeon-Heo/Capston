@@ -31,6 +31,9 @@ public class Item {
     @Enumerated(EnumType.STRING)
     private Category category; //카테고리
 
+    @Column(name = "image_url")
+    private String imageUrl; //이미지
+
 
     //주문된 상품들
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)

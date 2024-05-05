@@ -12,4 +12,5 @@ public class ItemDTO {
     private int price;
     private int stockQuantity;
     private Category category;
+    private String imageUrl;
 }
