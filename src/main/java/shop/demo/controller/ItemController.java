@@ -63,16 +63,11 @@ public class ItemController {
     //상품 검색
     @GetMapping("/search")
     public ResponseEntity<List<ItemDTO>> searchItems(@RequestParam String keyword) {
-        try {
-            // 검색어 URL 디코딩
-            String decodedKeyword = URLDecoder.decode(keyword, StandardCharsets.UTF_8.toString());
-            // 검색어를 포함하는 상품 목록 조회
-            List<ItemDTO> searchResults = itemService.searchItems(decodedKeyword);
-            return ResponseEntity.ok(searchResults);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().build();
-        }
+        // 검색어 URL 디코딩
+        String decodedKeyword = URLDecoder.decode(keyword, StandardCharsets.UTF_8);
+        // 검색어를 포함하는 상품 목록 조회
+        List<ItemDTO> searchResults = itemService.searchItems(decodedKeyword);
+        return ResponseEntity.ok(searchResults);
     }
 
     //상품 삭제
