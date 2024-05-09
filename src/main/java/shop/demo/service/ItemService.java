@@ -117,7 +117,7 @@ public class ItemService {
         //업로드된 파일 이름에서 공백 제거
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         //파일명에 UUID 추가하여 중복 방지
-        fileName = UUID.randomUUID().toString() + "_" + fileName;
+        fileName = UUID.randomUUID() + "_" + fileName;
 
         String uploadDir = "src/main/resources/static/images";
 
