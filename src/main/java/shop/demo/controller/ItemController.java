@@ -10,7 +10,6 @@ import shop.demo.domain.Category;
 import shop.demo.service.ItemService;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
