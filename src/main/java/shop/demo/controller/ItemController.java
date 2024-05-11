@@ -30,7 +30,7 @@ public class ItemController {
     }
 
     // 특정 상품 조회
-    @GetMapping("/{itemId}")
+    @GetMapping("/get/{itemId}")
     public ResponseEntity<ItemDTO> getItem(@PathVariable Long itemId) {
         ItemDTO itemDTO = itemService.findOne(itemId);
         if (itemDTO != null) {
