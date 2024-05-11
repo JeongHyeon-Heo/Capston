@@ -20,9 +20,12 @@ public class Order {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    /*
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
-    private Address address;
+    private Address address;*/
+
+    private String address;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "payment_id")
@@ -32,6 +35,8 @@ public class Order {
     private List<OrderItem> orderItems = new ArrayList<>();
 
     private LocalDateTime date;
+
+    private OrderState orderState;
 
 
     //==연관관계 메서드==//
@@ -45,10 +50,11 @@ public class Order {
         orderItem.setOrder(this);
     }
 
+    /*
     public void setAddress(Address address) {
         this.address = address;
         address.setOrder(this);
-    }
+    }*/
 
     public void setPayment(Payment payment) {
         this.payment = payment;
@@ -56,7 +62,7 @@ public class Order {
     }
 
 
-    public static Order createOrder(Member member, Address address, Payment payment,List<OrderItem> orderItems) {
+    public static Order createOrder(Member member, String address, Payment payment,List<OrderItem> orderItems) {
         Order order = new Order();
         order.setMember(member);
         order.setAddress(address);
@@ -64,6 +70,7 @@ public class Order {
         for (OrderItem orderItem : orderItems) {
             order.addOrderItem(orderItem);
         }
+        order.setOrderState(OrderState.SHIPPED);
         order.setDate(LocalDateTime.now());
         return order;
     }
