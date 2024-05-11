@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import shop.demo.domain.Address;
+
 import java.time.LocalDateTime;
 
 @Getter
@@ -12,10 +14,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class MemberDTO {
 
-    private Long id;
     private String name;
     private String email;
     private String password;
+    private String address;
     private LocalDateTime date;
 
 }

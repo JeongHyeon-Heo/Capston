@@ -14,10 +14,9 @@ import java.util.List;
 @AllArgsConstructor
 public class MemberInfoDTO {
 
-    private Long id;
     private String name;
     private String email;
-    private String password;
+    private String adress;
     private LocalDateTime date;
     private List<Long> orders;
     private List<Long> carts;

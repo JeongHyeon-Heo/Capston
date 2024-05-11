@@ -1,8 +1,11 @@
 package shop.demo.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import shop.demo.domain.Address;
 import shop.demo.domain.Cart;
 import shop.demo.domain.Order;
 import shop.demo.dto.MemberDTO;
@@ -19,16 +22,27 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
+
+/*
     @Transactional
-    public void saveMember(MemberDTO memberDTO) {
+    public void saveMember(MemberDTO memberDTO, PasswordEncoder passwordEncoder) {
         Member member = new Member();
         member.setName(memberDTO.getName());
         member.setEmail(memberDTO.getEmail());
         member.setPassword(memberDTO.getPassword());
+        member.setAddress(memberDTO.getAddress());
         member.setRegistrationDate(LocalDateTime.now());
         memberRepository.save(member);
+    }*/
+
+    @Transactional
+    public void saveMember(MemberDTO memberDTO){
+        Member member = Member.createMember(memberDTO, passwordEncoder);
+        memberRepository.save(member);
     }
+
 
 //    public Member findMemberById(Long id) {
 //        return memberRepository.findOne(id);
@@ -71,4 +85,5 @@ public MemberInfoDTO findMemberById(Long id) {
         }
         return false;
     }
+
 }

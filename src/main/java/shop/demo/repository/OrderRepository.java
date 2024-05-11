@@ -29,5 +29,11 @@ public class OrderRepository {
         return member.getOrders();
     }
 
+    public List<Long> findOrderIdsByMemberId(Long memberId) {
+        return em.createQuery("SELECT o.id FROM Order o WHERE o.member.id = :memberId", Long.class)
+                .setParameter("memberId", memberId)
+                .getResultList();
+    }
+
 
 }

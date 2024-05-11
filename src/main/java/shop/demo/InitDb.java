@@ -4,9 +4,11 @@ package shop.demo;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import shop.demo.domain.*;
+import shop.demo.dto.MemberDTO;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -40,10 +42,12 @@ public class InitDb {
     static class InitService {
 
         private final EntityManager em;
-
+        private final PasswordEncoder passwordEncoder;
         public void dbInit1() {
-            System.out.println("Init1" + this.getClass());
+            System.out.println("Init1" + this.getClass());/*
             Member member = createMember("userA");
+            em.persist(member);*/
+            Member member = Member.createMember(createTestMemberDTO(), passwordEncoder);
             em.persist(member);
 
             Item cloth1 = createItem();
@@ -68,14 +72,16 @@ public class InitDb {
 
 
             Address address1 = createAddress(1L,"주소1");
+            String address1_2 = address1.getAddressAsString();
             Address address2 = createAddress(1L,"주소1");
+            String address2_2 = address2.getAddressAsString();
             Address address3 = createAddress(1L,"주소1");
             Payment payment1 = createPayment(1L,1000L);
             Payment payment2 = createPayment(1L,1000L);
             Payment payment3 = createPayment(1L,1000L);
 
-            Order order1 = Order.createOrder(member, address1 ,payment1 ,orderItems1);
-            Order order2 = Order.createOrder(member, address2 ,payment2 ,orderItems2);
+            Order order1 = Order.createOrder(member, address1_2 ,payment1 ,orderItems1);
+            Order order2 = Order.createOrder(member, address2_2 ,payment2 ,orderItems2);
 
 
             em.persist(order1);
@@ -88,17 +94,28 @@ public class InitDb {
             Member member = new Member();
             member.setName(name);
 
-            member.setDate(LocalDateTime.now());
+            member.setRegistrationDate(LocalDateTime.now());
             member.setEmail("hansung.ac.kr");
             member.setPassword("1234");
             return member;
         }
 
+        public MemberDTO createTestMemberDTO() {
+            MemberDTO memberDTO = new MemberDTO();
+            memberDTO.setName("Test User");
+            memberDTO.setEmail("hansung@hansung.ac.kr");
+            memberDTO.setPassword("1234");
+            memberDTO.setAddress("Test Address");
+            memberDTO.setDate(LocalDateTime.now());
+            return memberDTO;
+        }
+
+
         private Item createItem(){
             Item item = new Item();
             item.setName("상의1");
             item.setPrice(1000);
-            item.setStockQuantity(3);
+            item.setStockQuantity(10);
             item.setCategory(Category.valueOf("TOP"));
             return item;
         }
