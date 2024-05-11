@@ -31,6 +31,11 @@ public class CartRepository {
         Member member = em.find(Member.class, memberId);
         return member.getCarts();
     }
+    public List<Long> findCartIdsByMemberId(Long memberId) {
+        return em.createQuery("SELECT c.id FROM Cart c WHERE c.member.id = :memberId", Long.class)
+                .setParameter("memberId", memberId)
+                .getResultList();
+    }
 
     public void deleteCustomerCart(Member member) {
         String hql = "delete from Cart where member = :member";

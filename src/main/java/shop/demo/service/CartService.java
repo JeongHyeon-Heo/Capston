@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import shop.demo.domain.Cart;
 import shop.demo.domain.Item;
 import shop.demo.domain.Member;
+import shop.demo.dto.CartAddDTO;
 import shop.demo.dto.CartDTO;
 import shop.demo.repository.CartRepository;
 import shop.demo.repository.ItemRepository;
@@ -27,12 +28,12 @@ public class CartService {
     private final CartRepository cartRepository;
 
 
-    public Long addCart(Long MemberID, Long ItemID, Long quantity){
+    public Long addCart(Long MemberID, CartAddDTO cartAddDTO){
 
         Member member = memberRepository.findOne(MemberID);
-        Item item = itemRepository.findItemById(ItemID);
+        Item item = itemRepository.findItemById(cartAddDTO.getItemId());
 
-        Cart cart = Cart.createcart(member,item,quantity);
+        Cart cart = Cart.createcart(member,item,cartAddDTO.getQuantity());
 
         cartRepository.save(cart);
         return cart.getId();
@@ -68,6 +69,13 @@ public class CartService {
         }
 
         return cartDTOs;
+    }
+    public Member findMemberByEmail(String email){
+        return memberRepository.findByEmail(email);
+    }
+
+    public List<Long> getUserCartIds(Long memberId) {
+        return cartRepository.findCartIdsByMemberId(memberId);
     }
 
 

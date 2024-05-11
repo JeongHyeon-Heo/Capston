@@ -3,6 +3,10 @@ package shop.demo.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import shop.demo.dto.MemberDTO;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +28,14 @@ public class Member {
 
     private LocalDateTime registrationDate;
 
+    @Enumerated(EnumType.STRING)
+    private Role role;
+/*
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_id")
+    private Address address;*/
+    private String address;
+
     @OneToMany(mappedBy = "member")
     private List<Order> orders = new ArrayList<>();
 
@@ -36,15 +48,31 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<ServiceCenter> serviceCenters = new ArrayList<>();
 
+/*
+    public void setAddress(Address address) {
+        this.address = address;
+        address.setMember(this);
+    }*/
 
-    public static Member createMember(String name, String email, String password, LocalDateTime registrationDate) {
+
+    public static Member createMember(MemberDTO memberFormDto, PasswordEncoder passwordEncoder ) {
         Member member = new Member();
-        member.setName(name);
-        member.setEmail(email);
+        member.setName(memberFormDto.getName());
+        member.setEmail(memberFormDto.getEmail());
+        member.setAddress(memberFormDto.getAddress());
+        member.setRegistrationDate(LocalDateTime.now());
+        String password =  passwordEncoder.encode(memberFormDto.getPassword());
         member.setPassword(password);
-        member.setRegistrationDate(registrationDate);
+        member.setRole(Role.ROLE_USER); // 계정 생성 시 권한을 USER으로 고정
 
         return member;
     }
+
+    public void setRoleFromString(String role) {
+        // Enum.valueOf 메서드를 사용하여 문자열을 Enum으로 변환
+        this.role = Role.valueOf(role.toUpperCase());
+    }
+
+
 
 }

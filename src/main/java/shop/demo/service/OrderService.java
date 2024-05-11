@@ -37,18 +37,19 @@ public class OrderService {
         return orders.stream()
                 .map(order -> new OrderDTO(order.getId(),
                         order.getMember().getId(),
-                        order.getAddress().getId(),
+                        order.getAddress(),
                         order.getPayment().getId(),
                         order.getOrderItems().stream()
                                 .map(OrderItem::getId)
                                 .collect(Collectors.toList()),
-                        order.getDate()))
+                        order.getDate(),
+                        order.getOrderState()))
                 .collect(Collectors.toList());
     }
 
 
     @Transactional
-    public Long addorderfromcart(Long memberId, Long zipcode, String detail, Long cardnum) {
+    public Long addorderfromcart(Long memberId, Long cardnum) {
 
         //엔티티 조회
         Member member = memberRepository.findOne(memberId);
@@ -67,12 +68,10 @@ public class OrderService {
         }
 
         //배송정보 생성
-        Address address = createAddress(zipcode,detail);
+        String address = member.getAddress();
         Payment payment = createPayment(cardnum,amount);
 
         //주문상품 생성
-
-
         Order order = Order.createOrder(member, address, payment, orderItems);
 
         //주문 저장
@@ -80,28 +79,37 @@ public class OrderService {
 
         return order.getId();
     }
-
-    /*
+    public List<Long> getOrderIdsByMemberId(Long memberId) {
+        return orderRepository.findOrderIdsByMemberId(memberId);
+    }
     @Transactional
-    public void removeOrderbymember(Long memberID) {
-        List<Order> orders = orderRepository.findByMember(memberID);
-        for (Order order : orders) {
-            orderRepository.delete(order);
+    public void cancelOrder(Long orderId) {
+        Order order = orderRepository.findById(orderId);
+        if (order != null) {
+            // 주문 상태를 취소로 변경합니다.
+            order.setOrderState(OrderState.CANCELLED);
+
+            // 주문된 아이템들의 재고를 복원합니다.
+            List<OrderItem> orderItems = order.getOrderItems();
+            for (OrderItem orderItem : orderItems) {
+                Item item = orderItem.getItem();
+                int quantity = orderItem.getQuantity();
+                item.addStock(quantity);
+            }
+
+            // 주문을 저장합니다.
+            orderRepository.save(order);
         }
-    }*/
+    }
+
     @Transactional
     public void removeOrder(Long orderid) {
         Order order = orderRepository.findById(orderid);
         orderRepository.delete(order);
     }
 
-
-
-    private Address createAddress(Long zipcode, String detail ) {
-        Address address = new Address();
-        address.setZipcode(zipcode);
-        address.setDetail(detail);
-        return address;
+    public Member findMemberByEmail(String email){
+        return memberRepository.findByEmail(email);
     }
 
     private Payment createPayment(Long cardnum ,Long amount) {
