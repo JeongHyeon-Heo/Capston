@@ -68,11 +68,13 @@ public class Member {
         return member;
     }
 
+
+    public void setDate(LocalDateTime now) {
+    }
+
     public void setRoleFromString(String role) {
         // Enum.valueOf 메서드를 사용하여 문자열을 Enum으로 변환
         this.role = Role.valueOf(role.toUpperCase());
     }
-
-
 
 }
