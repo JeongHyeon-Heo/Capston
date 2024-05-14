@@ -3,7 +3,6 @@ package shop.demo.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import shop.demo.dto.MemberDTO;
 
@@ -20,15 +19,18 @@ public class Member {
     @Column(name = "member_id")
     private Long id;
 
+
     private String name;
 
+    @Column(unique = true)
     private String email;
 
     private String password;
 
     private LocalDateTime registrationDate;
 
-    @Enumerated(EnumType.STRING)
+//    초기 오류로 인해 일단 주석 처리한 상태.
+//    @Enumerated(EnumType.STRING)
     private Role role;
 /*
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

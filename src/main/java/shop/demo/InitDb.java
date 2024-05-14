@@ -1,18 +1,12 @@
 package shop.demo;
 
 
-import jakarta.annotation.PostConstruct;
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-import shop.demo.domain.*;
+import shop.demo.domain.Member;
 import shop.demo.dto.MemberDTO;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -28,7 +22,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class InitDb {
 
-    private final InitService initService;
+/*    private final InitService initService;*/
+/*
 
     @PostConstruct
     public void init() {
@@ -44,9 +39,7 @@ public class InitDb {
         private final EntityManager em;
         private final PasswordEncoder passwordEncoder;
         public void dbInit1() {
-            System.out.println("Init1" + this.getClass());/*
-            Member member = createMember("userA");
-            em.persist(member);*/
+            System.out.println("Init1" + this.getClass());
             Member member = Member.createMember(createTestMemberDTO(), passwordEncoder);
             em.persist(member);
 
@@ -88,6 +81,7 @@ public class InitDb {
             em.persist(order2);
         }
 
+*/
 
 
         private Member createMember(String name) {
@@ -110,7 +104,7 @@ public class InitDb {
             return memberDTO;
         }
 
-
+/*
         private Item createItem(){
             Item item = new Item();
             item.setName("상의1");
@@ -134,11 +128,11 @@ public class InitDb {
                 payment.setAmountpay(amount);
                 payment.setDate(LocalDateTime.now());
                 return payment;
-            }
+            }*/
 
 
 
 
-    }
+//    }
 }
 
