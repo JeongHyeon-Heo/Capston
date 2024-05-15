@@ -2,13 +2,16 @@ package shop.demo.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import shop.demo.domain.OrderState;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Getter @Setter
+@Getter
+@Setter
+@NoArgsConstructor
 @AllArgsConstructor
 public class OrderDTO {
 
@@ -16,7 +19,7 @@ public class OrderDTO {
     private Long memberId;
     private String address;
     private Long paymentId;
-    private List<Long> orderItemIds;
+    private List<OrderItemDTO> orderItems;
     private LocalDateTime date;
     private OrderState orderState;
 
