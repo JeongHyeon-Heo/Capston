@@ -11,6 +11,7 @@ import shop.demo.domain.Member;
 import shop.demo.domain.Order;
 import shop.demo.dto.OrderCardDTO;
 import shop.demo.dto.OrderDTO;
+import shop.demo.dto.OrderSelectCartDTO;
 import shop.demo.service.OrderService;
 
 import java.util.List;
@@ -36,6 +37,14 @@ public class OrderController {
         Member member = orderService.findMemberByEmail(userDetails.getUsername());
         Long memberId = member.getId();
         Long orderId = orderService.addorderfromcart(memberId, orderCardDTO.getCardnum());
+        return ResponseEntity.ok(orderId);
+    }
+    @PostMapping("/addselectcart")
+    public ResponseEntity<Long> addOrderSelectCart(@AuthenticationPrincipal UserDetails userDetails,
+                                                   @RequestBody OrderSelectCartDTO orderSelectCartDTO) {
+        Member member = orderService.findMemberByEmail(userDetails.getUsername());
+        Long memberId = member.getId();
+        Long orderId = orderService.addorderfromselectcart(memberId, orderSelectCartDTO.getCardnum(), orderSelectCartDTO.getCartIds());
         return ResponseEntity.ok(orderId);
     }
 
