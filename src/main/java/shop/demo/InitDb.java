@@ -44,9 +44,7 @@ public class InitDb {
         private final EntityManager em;
         private final PasswordEncoder passwordEncoder;
         public void dbInit1() {
-            System.out.println("Init1" + this.getClass());/*
-            Member member = createMember("userA");
-            em.persist(member);*/
+            System.out.println("Init1" + this.getClass());
             Member member = Member.createMember(createTestMemberDTO(), passwordEncoder);
             em.persist(member);
 
@@ -109,7 +107,6 @@ public class InitDb {
             memberDTO.setDate(LocalDateTime.now());
             return memberDTO;
         }
-
 
         private Item createItem(){
             Item item = new Item();

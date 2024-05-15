@@ -2,11 +2,11 @@ package shop.demo.service;
 
 
 import lombok.RequiredArgsConstructor;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.demo.domain.*;
 import shop.demo.dto.OrderDTO;
+import shop.demo.dto.OrderItemDTO;
 import shop.demo.repository.CartRepository;
 import shop.demo.repository.ItemRepository;
 import shop.demo.repository.MemberRepository;
@@ -31,7 +31,7 @@ public class OrderService {
     public List<Order> viewOrdersByMemberId(Long memberId) {
         return orderRepository.findByMember(memberId);
     }*/
-
+/*
     public List<OrderDTO> viewOrdersByMemberId(Long memberId) {
         List<Order> orders = orderRepository.findByMember(memberId);
         return orders.stream()
@@ -45,6 +45,37 @@ public class OrderService {
                         order.getDate(),
                         order.getOrderState()))
                 .collect(Collectors.toList());
+    }*/
+
+    public List<OrderDTO> viewOrdersByMemberId(Long memberId) {
+        List<Order> orders = orderRepository.findByMember(memberId);
+        return orders.stream()
+                .map(order -> convertToDto(order))
+                .collect(Collectors.toList());
+    }
+
+    private OrderDTO convertToDto(Order order) {
+        OrderDTO orderDTO = new OrderDTO();
+        orderDTO.setId(order.getId());
+        orderDTO.setMemberId(order.getMember().getId());
+        orderDTO.setAddress(order.getAddress());
+        orderDTO.setPaymentId(order.getPayment().getId());
+        // 주문 항목을 가져와서 OrderItemDTO로 변환하여 설정
+        List<OrderItemDTO> orderItemDTOs = order.getOrderItems().stream()
+                .map(orderItem -> {
+                    OrderItemDTO orderItemDTO = new OrderItemDTO();
+                    orderItemDTO.setId(orderItem.getId());
+                    orderItemDTO.setItemid(orderItem.getItem().getId());
+                    orderItemDTO.setItemname(orderItem.getItem().getName());
+                    orderItemDTO.setItemprice(orderItem.getItem().getPrice());
+                    orderItemDTO.setItemcategory(orderItem.getItem().getCategory());
+                    orderItemDTO.setQuantity(orderItem.getQuantity());
+                    return orderItemDTO;
+                }).collect(Collectors.toList());
+        orderDTO.setOrderItems(orderItemDTOs);
+        orderDTO.setDate(order.getDate());
+        orderDTO.setOrderState(order.getOrderState());
+        return orderDTO;
     }
 
 
@@ -56,7 +87,7 @@ public class OrderService {
         List<Cart> carts = cartRepository.findBymember(member.getId());
         List<Item> items = new ArrayList<>();
         List<OrderItem> orderItems = new ArrayList<>();
-        Long amount= 0L;
+        long amount= 0L;
 
         for (Cart cart : carts) {
             Item item = cart.getItem();
@@ -79,6 +110,44 @@ public class OrderService {
 
         return order.getId();
     }
+
+    @Transactional
+    public Long addorderfromselectcart(Long memberId, Long cardnum, List<Long> cartIds) {
+        Member member = memberRepository.findOne(memberId);
+        List<Cart> carts = new ArrayList<>();
+        for (Long cartId : cartIds) {
+            Cart cart = cartRepository.findById(cartId);
+            if (cart != null && cart.getMember().getId().equals(memberId)) {
+                carts.add(cart);
+            } else {
+                System.out.println("Invalid cart ID: " + cartId);
+            }
+        }
+        List<Item> items = new ArrayList<>();
+        List<OrderItem> orderItems = new ArrayList<>();
+        Long amount= 0L;
+        for (Cart cart : carts) {
+            Item item = cart.getItem();
+            int quantity = (cart.getQuantity()).intValue();
+            amount += item.getPrice()*quantity;
+            OrderItem orderItem = OrderItem.createOrderItem(item, quantity);
+            orderItems.add(orderItem);
+            items.add(item);
+        }
+
+        //배송정보 생성
+        String address = member.getAddress();
+        Payment payment = createPayment(cardnum,amount);
+
+        //주문상품 생성
+        Order order = Order.createOrder(member, address, payment, orderItems);
+
+        //주문 저장
+        orderRepository.save(order);
+
+        return order.getId();
+    }
+
     public List<Long> getOrderIdsByMemberId(Long memberId) {
         return orderRepository.findOrderIdsByMemberId(memberId);
     }

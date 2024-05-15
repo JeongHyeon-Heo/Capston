@@ -1,19 +1,16 @@
 package shop.demo.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import shop.demo.domain.Address;
 import shop.demo.domain.Cart;
+import shop.demo.domain.Member;
 import shop.demo.domain.Order;
 import shop.demo.dto.MemberDTO;
 import shop.demo.dto.MemberInfoDTO;
 import shop.demo.repository.MemberRepository;
-import shop.demo.domain.Member;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,28 +41,31 @@ public class MemberService {
     }
 
 
-//    public Member findMemberById(Long id) {
-//        return memberRepository.findOne(id);
-//    }
-public MemberInfoDTO findMemberById(Long id) {
-    Member member = memberRepository.findOne(id);
+    //　이메일로 찾기
+    public Member findMemberByEmail(String email) {
+        return memberRepository.findByEmail(email);
+    }
+
+
+    public MemberInfoDTO findMemberById(Long id) {
+        Member member = memberRepository.findOne(id);
 
     /* 수정 */
-    if (member != null) {
-        MemberInfoDTO memberInfoDTO = new MemberInfoDTO();
-        List<Long> orderIds = member.getOrders().stream().map(Order::getId).collect(Collectors.toList());
-        memberInfoDTO.setOrders(orderIds);
-        List<Long> cartIds = member.getCarts().stream().map(Cart::getId).collect(Collectors.toList());
-        memberInfoDTO.setCarts(cartIds);
+        if (member != null) {
+            MemberInfoDTO memberInfoDTO = new MemberInfoDTO();
+            List<Long> orderIds = member.getOrders().stream().map(Order::getId).collect(Collectors.toList());
+            memberInfoDTO.setOrders(orderIds);
+            List<Long> cartIds = member.getCarts().stream().map(Cart::getId).collect(Collectors.toList());
+            memberInfoDTO.setCarts(cartIds);
 /* 수정 */
 //        memberInfoDTO.setOrders(member.getOrders());
 //        memberInfoDTO.setCarts(member.getCarts());
-        memberInfoDTO.setName(member.getName());
-        memberInfoDTO.setEmail(member.getEmail());
-        memberInfoDTO.setDate(member.getRegistrationDate());
-        return memberInfoDTO;
-    } else {
-        return null; // 또는 예외 처리를 수행할 수도 있습니다.
+            memberInfoDTO.setName(member.getName());
+            memberInfoDTO.setEmail(member.getEmail());
+            memberInfoDTO.setDate(member.getRegistrationDate());
+            return memberInfoDTO;
+                } else {
+            return null; // 또는 예외 처리를 수행할 수도 있습니다.
     }
 }
 
