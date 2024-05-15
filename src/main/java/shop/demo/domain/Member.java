@@ -3,7 +3,6 @@ package shop.demo.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import shop.demo.dto.MemberDTO;
 
@@ -20,8 +19,10 @@ public class Member {
     @Column(name = "member_id")
     private Long id;
 
+
     private String name;
 
+    @Column(unique = true)
     private String email;
 
     private String password;
