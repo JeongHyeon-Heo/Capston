@@ -29,8 +29,7 @@ public class Member {
 
     private LocalDateTime registrationDate;
 
-//    초기 오류로 인해 일단 주석 처리한 상태.
-//    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING)
     private Role role;
 /*
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

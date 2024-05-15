@@ -32,17 +32,6 @@ public class MemberController {
 
 
 
-    // 자기정보만 볼 수 있게
-    /*@GetMapping("/{id}")
-    public ResponseEntity<MemberInfoDTO> getMemberById(@PathVariable Long id) {
-        MemberInfoDTO memberInfoDTO = memberService.findMemberById(id);
-        if (memberInfoDTO != null)
-            return ResponseEntity.ok(memberInfoDTO);
-        else return ResponseEntity.notFound().build();
-    }*/
-
-
-
 
 
 
