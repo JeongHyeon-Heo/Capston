@@ -62,6 +62,7 @@ public class MemberService {
 //        memberInfoDTO.setCarts(member.getCarts());
             memberInfoDTO.setName(member.getName());
             memberInfoDTO.setEmail(member.getEmail());
+            memberInfoDTO.setAddress(member.getAddress());
             memberInfoDTO.setDate(member.getRegistrationDate());
             return memberInfoDTO;
                 } else {

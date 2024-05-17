@@ -1,5 +1,6 @@
 package shop.demo.jwt;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,6 +13,7 @@ import shop.demo.domain.Member;
 import shop.demo.dto.CustomUserDetails;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 public class JWTFilter extends OncePerRequestFilter {
 
@@ -44,17 +46,21 @@ public class JWTFilter extends OncePerRequestFilter {
         String token = authorization.split(" ")[1];
 
         //토큰 소멸 시간 검증
-        if (jwtUtil.isExpired(token)) {
+        try {
+            jwtUtil.isExpired(token);
+        } catch (ExpiredJwtException e) {
 
-            System.out.println("token expired");
-            filterChain.doFilter(request, response);
+            //response body
+            PrintWriter writer = response.getWriter();
+            writer.print("access token expired");
 
-            //조건이 해당되면 메소드 종료 (필수)
+            //response status code
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
 
         //토큰에서 username과 role 획득
-        String email = jwtUtil.getUsername(token);
+        String email = jwtUtil.getEmail(token);
         String role = jwtUtil.getRole(token);
 
         //userEntity를 생성하여 값 set
@@ -62,11 +68,6 @@ public class JWTFilter extends OncePerRequestFilter {
         member.setEmail(email);
         member.setPassword("temppassword");
         member.setRoleFromString(role);
-        System.out.println(email+" ----------- "+role);
-
-        System.out.println("Email: " + member.getEmail());
-        System.out.println("Password: " + member.getPassword());
-        System.out.println("Role: " + member.getRole());
 
         //UserDetails에 회원 정보 객체 담기
         CustomUserDetails customUserDetails = new CustomUserDetails(member);

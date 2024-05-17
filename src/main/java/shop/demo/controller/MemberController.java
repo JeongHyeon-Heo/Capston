@@ -30,16 +30,12 @@ public class MemberController {
         return ResponseEntity.ok("회원 추가");
     }
 
-
-
-
-
-
     /* 5.14 수정된 코드 사용자 본인만 조회 */
     /* 테스트하지 못하였음. token null 이슈 */
     @GetMapping("/{id}")
     public ResponseEntity<MemberInfoDTO> getMemberById(@AuthenticationPrincipal UserDetails userDetails,
                                                        @PathVariable Long id) {
+        System.out.println(userDetails.getUsername());
         Member member = memberService.findMemberByEmail(userDetails.getUsername());
         Long memberId = member.getId();
         if (!memberId.equals(id)) {
@@ -72,7 +68,7 @@ public class MemberController {
         // 요청된 id가 현재 사용자의 id와 일치하는지 확인.
         if (!memberId.equals(id))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-
+/*
         // 회원의 모든 주문을 삭제
         List<Long> orderIds = orderService.getOrderIdsByMemberId(memberId);
         for (Long orderId : orderIds) {
@@ -83,7 +79,7 @@ public class MemberController {
         List<Long> cartIds = cartService.getUserCartIds(memberId);
         for (Long cartId : cartIds) {
             cartService.deleteCart(cartId);
-        }
+        }*/
 
         // 회원을 삭제
         // boolean으로 굳이 안해도 되긴 함. 그냥 이전 작성 코드 때문에 boolean사용

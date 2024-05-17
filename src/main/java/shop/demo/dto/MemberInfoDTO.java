@@ -16,7 +16,7 @@ public class MemberInfoDTO {
 
     private String name;
     private String email;
-    private String adress;
+    private String address;
     private LocalDateTime date;
     private List<Long> orders;
     private List<Long> carts;
