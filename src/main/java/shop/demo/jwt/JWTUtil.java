@@ -15,13 +15,12 @@ public class JWTUtil {
 
     private SecretKey secretKey;
 
-
     public JWTUtil(@Value("${spring.jwt.secret}") String secret) {
 
         secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), Jwts.SIG.HS256.key().build().getAlgorithm());
     }
 
-    public String getUsername(String token) {
+    public String getEmail(String token) {
 
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("email", String.class);
     }
@@ -35,10 +34,15 @@ public class JWTUtil {
 
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
     }
+    public String getCategory(String token) {
 
-    public String createJwt(String email, String role, Long expiredMs) {
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("category", String.class);
+    }
+
+    public String createJwt(String category, String email, String role, Long expiredMs) {
 
         return Jwts.builder()
+                .claim("category", category)
                 .claim("email", email)
                 .claim("role", role)
                 .issuedAt(new Date(System.currentTimeMillis()))
@@ -46,4 +50,5 @@ public class JWTUtil {
                 .signWith(secretKey)
                 .compact();
     }
+
 }
