@@ -9,6 +9,7 @@ import shop.demo.domain.Item;
 import shop.demo.domain.Member;
 import shop.demo.dto.CartAddDTO;
 import shop.demo.dto.CartDTO;
+import shop.demo.dto.CartItemDTO;
 import shop.demo.repository.CartRepository;
 import shop.demo.repository.ItemRepository;
 import shop.demo.repository.MemberRepository;
@@ -61,10 +62,20 @@ public class CartService {
 
         for (Cart cart : carts) {
             CartDTO cartDTO = new CartDTO();
+
             cartDTO.setId(cart.getId());
             cartDTO.setMemberId(cart.getMember().getId());
-            cartDTO.setItemId(cart.getItem().getId());
+
+            CartItemDTO cartItemDTO = new CartItemDTO();
+            cartItemDTO.setItemId(cart.getItem().getId());
+            cartItemDTO.setName(cart.getItem().getName());
+            cartItemDTO.setPrice(cart.getItem().getPrice());
+            cartItemDTO.setCategory(cart.getItem().getCategory());
+            cartItemDTO.setImageUrl(cart.getItem().getImageUrl());
+            cartDTO.setCartItemDTO(cartItemDTO);
+
             cartDTO.setQuantity(cart.getQuantity());
+
             cartDTOs.add(cartDTO);
         }
 
