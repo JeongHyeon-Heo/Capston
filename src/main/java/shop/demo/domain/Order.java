@@ -27,9 +27,9 @@ public class Order {
 
     private String address;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "payment_id")
-    private Payment payment;
+    private Long card;
+
+    private Long amountpay;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
@@ -55,18 +55,19 @@ public class Order {
         this.address = address;
         address.setOrder(this);
     }*/
-
+/*
     public void setPayment(Payment payment) {
         this.payment = payment;
         payment.setOrder(this);
-    }
+    }*/
 
 
-    public static Order createOrder(Member member, String address, Payment payment,List<OrderItem> orderItems) {
+    public static Order createOrder(Member member, String address, Long card,Long amountpay,List<OrderItem> orderItems) {
         Order order = new Order();
         order.setMember(member);
         order.setAddress(address);
-        order.setPayment(payment);
+        order.setCard(card);
+        order.setAmountpay(amountpay);
         for (OrderItem orderItem : orderItems) {
             order.addOrderItem(orderItem);
         }

@@ -59,7 +59,8 @@ public class OrderService {
         orderDTO.setId(order.getId());
         orderDTO.setMemberId(order.getMember().getId());
         orderDTO.setAddress(order.getAddress());
-        orderDTO.setPaymentId(order.getPayment().getId());
+        orderDTO.setCard(order.getCard());
+        orderDTO.setAmountpay(order.getAmountpay());
         // 주문 항목을 가져와서 OrderItemDTO로 변환하여 설정
         List<OrderItemDTO> orderItemDTOs = order.getOrderItems().stream()
                 .map(orderItem -> {
@@ -70,6 +71,7 @@ public class OrderService {
                     orderItemDTO.setItemprice(orderItem.getItem().getPrice());
                     orderItemDTO.setItemcategory(orderItem.getItem().getCategory());
                     orderItemDTO.setQuantity(orderItem.getQuantity());
+                    orderItemDTO.setImageUrl(orderItem.getItem().getImageUrl());
                     return orderItemDTO;
                 }).collect(Collectors.toList());
         orderDTO.setOrderItems(orderItemDTOs);
@@ -100,10 +102,10 @@ public class OrderService {
 
         //배송정보 생성
         String address = member.getAddress();
-        Payment payment = createPayment(cardnum,amount);
+        //Payment payment = createPayment(cardnum,amount);
 
         //주문상품 생성
-        Order order = Order.createOrder(member, address, payment, orderItems);
+        Order order = Order.createOrder(member, address, cardnum, amount,orderItems);
 
         //주문 저장
         orderRepository.save(order);
@@ -137,10 +139,10 @@ public class OrderService {
 
         //배송정보 생성
         String address = member.getAddress();
-        Payment payment = createPayment(cardnum,amount);
+       // Payment payment = createPayment(cardnum,amount);
 
         //주문상품 생성
-        Order order = Order.createOrder(member, address, payment, orderItems);
+        Order order = Order.createOrder(member, address, cardnum, amount,orderItems);
 
         //주문 저장
         orderRepository.save(order);
@@ -180,7 +182,7 @@ public class OrderService {
     public Member findMemberByEmail(String email){
         return memberRepository.findByEmail(email);
     }
-
+/*
     private Payment createPayment(Long cardnum ,Long amount) {
 
         Payment payment = new Payment();
@@ -188,5 +190,5 @@ public class OrderService {
         payment.setAmountpay(amount);
         payment.setDate(LocalDateTime.now());
         return payment;
-    }
+    }*/
 }
