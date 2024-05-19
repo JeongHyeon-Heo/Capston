@@ -31,8 +31,8 @@ public class Item {
     @Enumerated(EnumType.STRING)
     private Category category; //카테고리
 
-    @Column(name = "image_url")
-    private String imageUrl; //이미지
+    @Column(name = "image_path")
+    private String imagePath; //이미지
 
 
     //주문된 상품들
@@ -42,7 +42,6 @@ public class Item {
     //장바구니에 담긴 상품들
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
     private List<Cart> carts = new ArrayList<>();
-
 
     //재고 추가
     public void addStock(int quantity){

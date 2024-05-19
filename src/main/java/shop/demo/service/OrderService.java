@@ -72,7 +72,7 @@ public class OrderService {
                     orderItemDTO.setItemprice(orderItem.getItem().getPrice());
                     orderItemDTO.setItemcategory(orderItem.getItem().getCategory());
                     orderItemDTO.setQuantity(orderItem.getQuantity());
-                    orderItemDTO.setImageUrl(orderItem.getItem().getImageUrl());
+                    orderItemDTO.setImageUrl(orderItem.getItem().getImagePath());
                     return orderItemDTO;
                 }).collect(Collectors.toList());
         orderDTO.setOrderItems(orderItemDTOs);

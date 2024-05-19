@@ -71,7 +71,7 @@ public class CartService {
             cartItemDTO.setName(cart.getItem().getName());
             cartItemDTO.setPrice(cart.getItem().getPrice());
             cartItemDTO.setCategory(cart.getItem().getCategory());
-            cartItemDTO.setImageUrl(cart.getItem().getImageUrl());
+            cartItemDTO.setImageUrl(cart.getItem().getImagePath());
             cartDTO.setCartItemDTO(cartItemDTO);
 
             cartDTO.setQuantity(cart.getQuantity());
