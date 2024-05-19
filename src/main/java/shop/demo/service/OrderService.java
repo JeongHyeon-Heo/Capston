@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.demo.domain.*;
+import shop.demo.dto.CartAddDTO;
 import shop.demo.dto.OrderDTO;
 import shop.demo.dto.OrderItemDTO;
 import shop.demo.repository.CartRepository;
@@ -112,7 +113,7 @@ public class OrderService {
 
         return order.getId();
     }
-
+/*
     @Transactional
     public Long addorderfromselectcart(Long memberId, Long cardnum, List<Long> cartIds) {
         Member member = memberRepository.findOne(memberId);
@@ -149,6 +150,45 @@ public class OrderService {
 
         return order.getId();
     }
+*/
+@Transactional
+public Long addOrderFromSelectCart(Long memberId, Long cardnum, List<CartAddDTO> cartItems) {
+    Member member = memberRepository.findOne(memberId);
+    if (member == null) {
+        throw new IllegalArgumentException("Member with id " + memberId + " not found");
+    }
+
+    List<Item> items = new ArrayList<>();
+    List<OrderItem> orderItems = new ArrayList<>();
+    long amount = 0L;
+
+    for (CartAddDTO cartItem : cartItems) {
+        Long itemId = cartItem.getItemId();
+        Long quantity = cartItem.getQuantity();
+
+        // Find item by id
+        Item item = itemRepository.findItemById(itemId);
+
+        amount += item.getPrice() * quantity;
+        OrderItem orderItem = OrderItem.createOrderItem(item, quantity.intValue());
+        orderItems.add(orderItem);
+        items.add(item);
+    }
+
+    // Get member address
+    String address = member.getAddress();
+
+    // Create payment - you can uncomment this once you have the payment logic
+    // Payment payment = createPayment(cardnum, amount);
+
+    // Create order
+    Order order = Order.createOrder(member, address, cardnum, amount, orderItems);
+
+    // Save order
+    orderRepository.save(order);
+
+    return order.getId();
+}
 
     public List<Long> getOrderIdsByMemberId(Long memberId) {
         return orderRepository.findOrderIdsByMemberId(memberId);

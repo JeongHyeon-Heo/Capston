@@ -44,7 +44,7 @@ public class OrderController {
                                                    @RequestBody OrderSelectCartDTO orderSelectCartDTO) {
         Member member = orderService.findMemberByEmail(userDetails.getUsername());
         Long memberId = member.getId();
-        Long orderId = orderService.addorderfromselectcart(memberId, orderSelectCartDTO.getCardnum(), orderSelectCartDTO.getCartIds());
+        Long orderId = orderService.addOrderFromSelectCart(memberId, orderSelectCartDTO.getCardnum(), orderSelectCartDTO.getCartAddDTOS());
         return ResponseEntity.ok(orderId);
     }
 

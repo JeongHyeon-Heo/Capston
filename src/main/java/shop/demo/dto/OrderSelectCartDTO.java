@@ -12,5 +12,5 @@ import java.util.List;
 @AllArgsConstructor
 public class OrderSelectCartDTO {
     private Long cardnum;
-    private List<Long> cartIds;
+    private List<CartAddDTO> cartAddDTOS;
 }
