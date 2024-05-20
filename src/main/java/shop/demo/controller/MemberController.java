@@ -7,8 +7,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import shop.demo.domain.Member;
-import shop.demo.dto.MemberDTO;
-import shop.demo.dto.MemberInfoDTO;
+import shop.demo.dto.*;
 import shop.demo.service.CartService;
 import shop.demo.service.MemberService;
 import shop.demo.service.OrderService;
@@ -24,6 +23,7 @@ public class MemberController {
     private final OrderService orderService;
     private final CartService cartService;
 
+
     @PostMapping("/add")
     public ResponseEntity<String> addMember(@RequestBody MemberDTO memberDTO) {
         memberService.saveMember(memberDTO);
@@ -31,31 +31,38 @@ public class MemberController {
     }
 
 
+    /* 내정보 조회시 카트아이디, 주문아이디 공개 */
+    /* 내정보 조회시 카트아이디, 주문아이디 공개 */
+    /* 내정보 조회시 카트아이디, 주문아이디 공개 */
+    /* 내정보 조회시 카트아이디, 주문아이디 공개 */
 
+//    @GetMapping({"/detail/address"})
 
-
-
-    /* 5.14 수정된 코드 사용자 본인만 조회 */
-    /* 테스트하지 못하였음. token null 이슈 */
     @GetMapping("/{id}")
     public ResponseEntity<MemberInfoDTO> getMemberById(@AuthenticationPrincipal UserDetails userDetails,
                                                        @PathVariable Long id) {
+        System.out.println(userDetails.getUsername());
         Member member = memberService.findMemberByEmail(userDetails.getUsername());
         Long memberId = member.getId();
+
         if (!memberId.equals(id)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
         MemberInfoDTO memberInfoDTO = memberService.findMemberById(id);
         if (memberInfoDTO != null) {
+            /* 수정 5.19 */
+            List<CartDTO> cartDTOS = cartService.viewAllCart(id);
+            List<OrderDTO> orderDTOS = orderService.viewOrdersByMemberId(id);
+            memberInfoDTO.setCartDTOS(cartDTOS);
+            memberInfoDTO.setOrderDTOS(orderDTOS);
+            /* 수정 5.19 */
             return ResponseEntity.ok(memberInfoDTO);
         } else {
             return ResponseEntity.notFound().build();
         }
+
     }
-
-
-
 
     /* 5.13 수정된 코드 사용자 본인 검증 */
     /* 테스트하지 못하였음. token null 이슈 */
@@ -73,17 +80,6 @@ public class MemberController {
         if (!memberId.equals(id))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
-        // 회원의 모든 주문을 삭제
-        List<Long> orderIds = orderService.getOrderIdsByMemberId(memberId);
-        for (Long orderId : orderIds) {
-            orderService.removeOrder(orderId);
-        }
-
-        // 회원의 모든 카트를 삭제
-        List<Long> cartIds = cartService.getUserCartIds(memberId);
-        for (Long cartId : cartIds) {
-            cartService.deleteCart(cartId);
-        }
 
         // 회원을 삭제
         // boolean으로 굳이 안해도 되긴 함. 그냥 이전 작성 코드 때문에 boolean사용
@@ -92,9 +88,24 @@ public class MemberController {
             return ResponseEntity.noContent().build();
         else
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+
+    /* 주소 수정 5.19 추가 */
+    @PutMapping("/update-address/{id}")
+    public ResponseEntity<String> updateMemberAddress(@AuthenticationPrincipal UserDetails userDetails,
+                                                      @PathVariable Long id,
+                                                      @RequestBody AddressUpdateDTO addressUpdateDTO) {
+        Member member = memberService.findMemberByEmail(userDetails.getUsername());
+        Long memberId = member.getId();
+
+        if (!memberId.equals(id)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-
+        memberService.updateMemberAddress(id, addressUpdateDTO);
+        return ResponseEntity.ok("주소 업데이트.");
     }
+    /* 주소 수정 */
+}
 
 
