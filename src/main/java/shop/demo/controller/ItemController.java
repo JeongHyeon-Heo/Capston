@@ -79,18 +79,5 @@ public class ItemController {
             return ResponseEntity.notFound().build();
         }
     }
-
-    //상품 이미지 업로드
-    @PostMapping("/uploadImage")
-    public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file) {
-        try {
-            //이미지를 서버에 저장, 해당 이미지 URL을 반환하는 메서드 호출
-            String imageUrl = itemService.uploadImage(file);
-            return ResponseEntity.ok(imageUrl);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("이미지 업로드에 실패했습니다.");
-        }
-    }
 }
 

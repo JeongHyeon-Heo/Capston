@@ -112,31 +112,6 @@ public class ItemService {
         return false;
     }
 
-    //상품 이미지 관리
-    public String uploadImage(MultipartFile file) throws IOException {
-        //업로드된 파일 이름에서 공백 제거
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-        //파일명에 UUID 추가하여 중복 방지
-        fileName = UUID.randomUUID() + "_" + fileName;
-
-        String uploadDir = "src/main/resources/static/images";
-
-        //업로드될 디렉토리가 없는 경우 생성
-        File directory = new File(uploadDir);
-        if (!directory.exists()) {
-            directory.mkdirs();
-        }
-
-        //파일 저장
-        Path filePath = Paths.get(uploadDir).resolve(fileName);
-        try (OutputStream outputStream = new FileOutputStream(filePath.toString())) {
-            outputStream.write(file.getBytes());
-        }
-
-        //이미지 URL 반환
-        return "/images/" + fileName;
-    }
-
     //ItemDTO를 Item으로 변환하는 메서드
     private Item convertToItem(ItemDTO itemDTO) {
         Item item = new Item();
@@ -144,6 +119,7 @@ public class ItemService {
         item.setPrice(itemDTO.getPrice());
         item.setStockQuantity(itemDTO.getStockQuantity());
         item.setCategory(itemDTO.getCategory());
+        item.setImagePath(itemDTO.getImagePath());
         return item;
     }
 
@@ -155,6 +131,7 @@ public class ItemService {
         dto.setPrice(item.getPrice());
         dto.setStockQuantity(item.getStockQuantity());
         dto.setCategory(item.getCategory());
+        dto.setImagePath(item.getImagePath());
         return dto;
     }
 
