@@ -74,12 +74,11 @@ public class InitDb {
             Address address2 = createAddress(1L,"주소1");
             String address2_2 = address2.getAddressAsString();
             Address address3 = createAddress(1L,"주소1");
-            Payment payment1 = createPayment(1L,1000L);
-            Payment payment2 = createPayment(1L,1000L);
-            Payment payment3 = createPayment(1L,1000L);
 
-            Order order1 = Order.createOrder(member, address1_2 ,payment1 ,orderItems1);
-            Order order2 = Order.createOrder(member, address2_2 ,payment2 ,orderItems2);
+            long cardnum = 123456789L;
+            long amountpay = 100000L;
+            Order order1 = Order.createOrder(member, address1_2 ,cardnum, amountpay ,orderItems1);
+            Order order2 = Order.createOrder(member, address2_2 ,cardnum, amountpay ,orderItems2);
 
 
             em.persist(order1);
@@ -123,7 +122,7 @@ public class InitDb {
                 address.setDetail(detail);
                 return address;
             }
-
+/*
             private Payment createPayment(Long cardnum ,Long amount) {
 
                 Payment payment = new Payment();
@@ -131,7 +130,7 @@ public class InitDb {
                 payment.setAmountpay(amount);
                 payment.setDate(LocalDateTime.now());
                 return payment;
-            }
+            }*/
 
 
 

@@ -18,7 +18,8 @@ public class OrderDTO {
     private Long id;
     private Long memberId;
     private String address;
-    private Long paymentId;
+    private Long card;
+    private Long amountpay;
     private List<OrderItemDTO> orderItems;
     private LocalDateTime date;
     private OrderState orderState;
