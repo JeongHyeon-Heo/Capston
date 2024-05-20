@@ -60,8 +60,10 @@ public class OrderService {
         orderDTO.setId(order.getId());
         orderDTO.setMemberId(order.getMember().getId());
         orderDTO.setAddress(order.getAddress());
+
         orderDTO.setCard(order.getCard());
         orderDTO.setAmountpay(order.getAmountpay());
+
         // 주문 항목을 가져와서 OrderItemDTO로 변환하여 설정
         List<OrderItemDTO> orderItemDTOs = order.getOrderItems().stream()
                 .map(orderItem -> {

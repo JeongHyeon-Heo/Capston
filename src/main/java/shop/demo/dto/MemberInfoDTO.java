@@ -20,4 +20,8 @@ public class MemberInfoDTO {
     private LocalDateTime date;
     private List<Long> orders;
     private List<Long> carts;
+    /* 수정 5.19 */
+    private List<CartDTO> cartDTOS;
+    private List<OrderDTO> orderDTOS;
+    /* 수정 5.19 */
 }

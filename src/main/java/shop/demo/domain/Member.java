@@ -31,6 +31,7 @@ public class Member {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
 /*
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
