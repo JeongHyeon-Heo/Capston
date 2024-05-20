@@ -3,22 +3,14 @@ package shop.demo.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
 import shop.demo.domain.Item;
 import shop.demo.domain.Category;
 import shop.demo.domain.ItemStatus;
 import shop.demo.dto.ItemDTO;
 import shop.demo.repository.ItemRepository;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 
