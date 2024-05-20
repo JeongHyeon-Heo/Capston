@@ -14,6 +14,7 @@ import shop.demo.domain.Cart;
 import shop.demo.domain.Member;
 import shop.demo.dto.CartAddDTO;
 import shop.demo.dto.CartDTO;
+import shop.demo.exception.ItemAlreadyInCartException;
 import shop.demo.service.CartService;
 
 import java.util.ArrayList;
@@ -37,19 +38,39 @@ public class CartController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Long> addCart(@AuthenticationPrincipal UserDetails userDetails,
+    public ResponseEntity<Object> addCart(@AuthenticationPrincipal UserDetails userDetails,
                                         @RequestBody CartAddDTO cartAddDTO) {
         Member member = cartService.findMemberByEmail(userDetails.getUsername());
         Long memberId = member.getId();
-        Long cartId = cartService.addCart(memberId, cartAddDTO);
-        return ResponseEntity.ok(cartId);
+        try {
+            Long cartId = cartService.addCart(memberId, cartAddDTO);
+            return ResponseEntity.ok(cartId);
+        } catch (ItemAlreadyInCartException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Item already in cart");
+        }
+
     }
 
-    @DeleteMapping("/delete/{cartId}")
-    public ResponseEntity<Void> deleteCart(@AuthenticationPrincipal UserDetails userDetails,
-                                           @PathVariable Long cartId) {
+    @PutMapping("/quantity")
+    public ResponseEntity<String> updateCartQuantity(@AuthenticationPrincipal UserDetails userDetails,
+                                                     @RequestBody CartAddDTO cartAddDTO) {
+
         Member member = cartService.findMemberByEmail(userDetails.getUsername());
         Long memberId = member.getId();
+        try {
+            cartService.updateCartQuantity(memberId, cartAddDTO.getItemId(), cartAddDTO.getQuantity());
+            return ResponseEntity.ok("Cart quantity updated successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update cart quantity.");
+        }
+    }
+
+    @DeleteMapping("/delete/{itemId}")
+    public ResponseEntity<Void> deleteCart(@AuthenticationPrincipal UserDetails userDetails,
+                                           @PathVariable Long itemId) {
+        Member member = cartService.findMemberByEmail(userDetails.getUsername());
+        Long memberId = member.getId();
+        Long cartId = cartService.findCartIdByMemberIdAndItemId(memberId, itemId);
 
         List<Long> userCartIds = cartService.getUserCartIds(memberId);
         if (userCartIds.contains(cartId)) {
@@ -69,48 +90,6 @@ public class CartController {
         cartService.deleteAllCart(memberId);
         return ResponseEntity.noContent().build();
     }
-/*
-    @DeleteMapping("/deleteAll")
-    public ResponseEntity<Void> deleteAllCart(@AuthenticationPrincipal UserDetails userDetails) {
-        Long memberId = Long.parseLong(userDetails.getUsername());
-        cartService.deleteAllCart(memberId);
-        return ResponseEntity.noContent().build();
-    }*/
-
-    /*@GetMapping("/viewAll/{memberId}")
-    public ResponseEntity<List<Cart>> viewAllCart(@PathVariable Long memberId) {
-        List<Cart> carts = cartService.ViewAllCart(memberId);
-        return ResponseEntity.ok(carts);
-    }*/
-    /*
-    @GetMapping("/viewAll/{memberId}")
-    public ResponseEntity<List<CartDTO>> viewAllCart(@PathVariable Long memberId) {
-        List<CartDTO> cartDTOs = cartService.viewAllCart(memberId);
-        return ResponseEntity.ok(cartDTOs);
-    }*/
-
-    /*
-    @PostMapping("/add/{memberId}")
-    public ResponseEntity<Long> addCart(@PathVariable Long memberId,
-                                        @RequestParam Long itemId,
-                                        @RequestParam Long quantity) {
-        Long cartId = cartService.addCart(memberId, itemId, quantity);
-        return ResponseEntity.ok(cartId);
-    }*/
-
-    /*
-    @DeleteMapping("/delete/{cartId}")
-    public ResponseEntity<Void> deleteCart(@PathVariable Long cartId) {
-        cartService.deleteCart(cartId);
-        return ResponseEntity.noContent().build();
-    }*/
-    /*
-    @DeleteMapping("/deleteAll/{memberId}")
-    public ResponseEntity<Void> deleteAllCart(@PathVariable Long memberId) {
-        cartService.deleteAllCart(memberId);
-        return ResponseEntity.noContent().build();
-    }*/
-
 
 
 }

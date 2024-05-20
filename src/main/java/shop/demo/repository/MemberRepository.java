@@ -55,5 +55,17 @@ public class MemberRepository {
         Member member = em.find(Member.class, id);
         return member != null;
     }
+
+
+    /* 이메일 중복 확인하기 위해 추가 5.20 */
+    public boolean existsByEmail(String email) {
+        try {
+            return em.createQuery("select count(m) > 0 from Member m where m.email = :email", Boolean.class)
+                    .setParameter("email", email)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return false;
+        }
+    }
 }
 

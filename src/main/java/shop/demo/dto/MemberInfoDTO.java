@@ -18,6 +18,7 @@ public class MemberInfoDTO {
     private String email;
     private String address;
     private LocalDateTime date;
-    private List<Long> orders;
-    private List<Long> carts;
+    /* 수정 5.19 */
+    private List<OrderDTO> orderDTOS;
+    /* 수정 5.19 */
 }

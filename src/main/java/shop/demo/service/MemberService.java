@@ -7,8 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import shop.demo.domain.Cart;
 import shop.demo.domain.Member;
 import shop.demo.domain.Order;
-import shop.demo.dto.MemberDTO;
-import shop.demo.dto.MemberInfoDTO;
+import shop.demo.dto.*;
 import shop.demo.repository.MemberRepository;
 
 import java.util.List;
@@ -21,21 +20,17 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
-
-/*
-    @Transactional
-    public void saveMember(MemberDTO memberDTO, PasswordEncoder passwordEncoder) {
-        Member member = new Member();
-        member.setName(memberDTO.getName());
-        member.setEmail(memberDTO.getEmail());
-        member.setPassword(memberDTO.getPassword());
-        member.setAddress(memberDTO.getAddress());
-        member.setRegistrationDate(LocalDateTime.now());
-        memberRepository.save(member);
-    }*/
+    /* 추가 5.19 MemberController에서 id조회시 카트와 오더를 받기 위함 */
+    private final CartService cartService;
+    private final OrderService orderService;
+    /* 수정 */
 
     @Transactional
     public void saveMember(MemberDTO memberDTO){
+        /* 5.20 중복 방지 예외처리 추가 */
+        if (memberRepository.existsByEmail(memberDTO.getEmail())) {
+            throw new IllegalStateException("중복된 이메일입니다.");
+        }
         Member member = Member.createMember(memberDTO, passwordEncoder);
         memberRepository.save(member);
     }
@@ -53,26 +48,23 @@ public class MemberService {
     /* 수정 */
         if (member != null) {
             MemberInfoDTO memberInfoDTO = new MemberInfoDTO();
-            List<Long> orderIds = member.getOrders().stream().map(Order::getId).collect(Collectors.toList());
-            memberInfoDTO.setOrders(orderIds);
-            List<Long> cartIds = member.getCarts().stream().map(Cart::getId).collect(Collectors.toList());
-            memberInfoDTO.setCarts(cartIds);
-/* 수정 */
-//        memberInfoDTO.setOrders(member.getOrders());
-//        memberInfoDTO.setCarts(member.getCarts());
+            /* 5.19 회원의 카트 정보*/
+            /* 회원의 주문 정보 가져오기 */
+            List<OrderDTO> orderDTOS = orderService.viewOrdersByMemberId(id);
+            memberInfoDTO.setOrderDTOS(orderDTOS);
+            /* 5.19 수정 */
+
             memberInfoDTO.setName(member.getName());
             memberInfoDTO.setEmail(member.getEmail());
             memberInfoDTO.setAddress(member.getAddress());
             memberInfoDTO.setDate(member.getRegistrationDate());
             return memberInfoDTO;
                 } else {
-            return null; // 또는 예외 처리를 수행할 수도 있습니다.
+            return null;
     }
 }
 
-//    public List<Member> findAllMembers() {
-//        return memberRepository.findAll();
-//    }
+
 
     public List<Member> findMembersByName(String name) {
         return memberRepository.findByName(name);
@@ -87,4 +79,12 @@ public class MemberService {
         return false;
     }
 
+    /* 주소 수정 추가 */
+    @Transactional
+    public void updateMemberAddress(Long memberId, AddressUpdateDTO addressUpdateDTO) {
+        Member member = memberRepository.findOne(memberId);
+        member.setAddress(addressUpdateDTO.getNewAddress());
+        memberRepository.save(member);
+
+    }
 }
