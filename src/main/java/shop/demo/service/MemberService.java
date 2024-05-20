@@ -27,6 +27,10 @@ public class MemberService {
 
     @Transactional
     public void saveMember(MemberDTO memberDTO){
+        /* 5.20 중복 방지 예외처리 추가 */
+        if (memberRepository.existsByEmail(memberDTO.getEmail())) {
+            throw new IllegalStateException("중복된 이메일입니다.");
+        }
         Member member = Member.createMember(memberDTO, passwordEncoder);
         memberRepository.save(member);
     }

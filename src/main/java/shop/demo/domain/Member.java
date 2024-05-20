@@ -32,11 +32,6 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    /* */
-
-
-
-    /* CartDTO, ItemDTO 생각 */
 /*
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
