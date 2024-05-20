@@ -48,13 +48,7 @@ public class MemberService {
     /* 수정 */
         if (member != null) {
             MemberInfoDTO memberInfoDTO = new MemberInfoDTO();
-            List<Long> orderIds = member.getOrders().stream().map(Order::getId).collect(Collectors.toList());
-            memberInfoDTO.setOrders(orderIds);
-            List<Long> cartIds = member.getCarts().stream().map(Cart::getId).collect(Collectors.toList());
-            memberInfoDTO.setCarts(cartIds);
             /* 5.19 회원의 카트 정보*/
-            List<CartDTO> cartDTOS = cartService.viewAllCart(id);
-            memberInfoDTO.setCartDTOS(cartDTOS);
             /* 회원의 주문 정보 가져오기 */
             List<OrderDTO> orderDTOS = orderService.viewOrdersByMemberId(id);
             memberInfoDTO.setOrderDTOS(orderDTOS);

@@ -14,6 +14,7 @@ import shop.demo.domain.Cart;
 import shop.demo.domain.Member;
 import shop.demo.dto.CartAddDTO;
 import shop.demo.dto.CartDTO;
+import shop.demo.exception.ItemAlreadyInCartException;
 import shop.demo.service.CartService;
 
 import java.util.ArrayList;
@@ -37,19 +38,39 @@ public class CartController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Long> addCart(@AuthenticationPrincipal UserDetails userDetails,
+    public ResponseEntity<Object> addCart(@AuthenticationPrincipal UserDetails userDetails,
                                         @RequestBody CartAddDTO cartAddDTO) {
         Member member = cartService.findMemberByEmail(userDetails.getUsername());
         Long memberId = member.getId();
-        Long cartId = cartService.addCart(memberId, cartAddDTO);
-        return ResponseEntity.ok(cartId);
+        try {
+            Long cartId = cartService.addCart(memberId, cartAddDTO);
+            return ResponseEntity.ok(cartId);
+        } catch (ItemAlreadyInCartException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Item already in cart");
+        }
+
     }
 
-    @DeleteMapping("/delete/{cartId}")
-    public ResponseEntity<Void> deleteCart(@AuthenticationPrincipal UserDetails userDetails,
-                                           @PathVariable Long cartId) {
+    @PutMapping("/quantity")
+    public ResponseEntity<String> updateCartQuantity(@AuthenticationPrincipal UserDetails userDetails,
+                                                     @RequestBody CartAddDTO cartAddDTO) {
+
         Member member = cartService.findMemberByEmail(userDetails.getUsername());
         Long memberId = member.getId();
+        try {
+            cartService.updateCartQuantity(memberId, cartAddDTO.getItemId(), cartAddDTO.getQuantity());
+            return ResponseEntity.ok("Cart quantity updated successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update cart quantity.");
+        }
+    }
+
+    @DeleteMapping("/delete/{itemId}")
+    public ResponseEntity<Void> deleteCart(@AuthenticationPrincipal UserDetails userDetails,
+                                           @PathVariable Long itemId) {
+        Member member = cartService.findMemberByEmail(userDetails.getUsername());
+        Long memberId = member.getId();
+        Long cartId = cartService.findCartIdByMemberIdAndItemId(memberId, itemId);
 
         List<Long> userCartIds = cartService.getUserCartIds(memberId);
         if (userCartIds.contains(cartId)) {

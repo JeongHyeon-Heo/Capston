@@ -84,23 +84,4 @@ public class OrderController {
         }
     }
 
-/*
-    @GetMapping("/member/{memberId}")
-    public ResponseEntity<List<OrderDTO>> getOrdersByMemberId(@PathVariable Long memberId) {
-        List<OrderDTO> orderDTOs = orderService.viewOrdersByMemberId(memberId);
-        return ResponseEntity.ok(orderDTOs);
-    }
-
-    @PostMapping("/add/{memberId}")
-    public ResponseEntity<Long> addOrderFromCart(@PathVariable Long memberId,
-                                                 @RequestBody Long cardnum) {
-        Long orderId = orderService.addorderfromcart(memberId, cardnum);
-        return ResponseEntity.ok(orderId);
-    }*/
-/*
-    @DeleteMapping("/remove/{orderid}")
-    public ResponseEntity<Void> removeOrder(@PathVariable Long orderid) {
-        orderService.removeOrder(orderid);
-        return ResponseEntity.noContent().build();
-    }*/
 }
