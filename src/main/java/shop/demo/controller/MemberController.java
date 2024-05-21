@@ -38,23 +38,17 @@ public class MemberController {
 
 //    @GetMapping({"/detail/address"})
 
-    @GetMapping("/{id}")
-    public ResponseEntity<MemberInfoDTO> getMemberById(@AuthenticationPrincipal UserDetails userDetails,
-                                                       @PathVariable Long id) {
+    @GetMapping("/info")
+    public ResponseEntity<MemberInfoDTO> getMemberById(@AuthenticationPrincipal UserDetails userDetails) {
+
         System.out.println(userDetails.getUsername());
         Member member = memberService.findMemberByEmail(userDetails.getUsername());
         Long memberId = member.getId();
 
-        if (!memberId.equals(id)) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
-        MemberInfoDTO memberInfoDTO = memberService.findMemberById(id);
+        MemberInfoDTO memberInfoDTO = memberService.findMemberById(memberId);
         if (memberInfoDTO != null) {
             /* 수정 5.19 */
-            List<CartDTO> cartDTOS = cartService.viewAllCart(id);
-            List<OrderDTO> orderDTOS = orderService.viewOrdersByMemberId(id);
-            memberInfoDTO.setCartDTOS(cartDTOS);
+            List<OrderDTO> orderDTOS = orderService.viewOrdersByMemberId(memberId);
             memberInfoDTO.setOrderDTOS(orderDTOS);
             /* 수정 5.19 */
             return ResponseEntity.ok(memberInfoDTO);

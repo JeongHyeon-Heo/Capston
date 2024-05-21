@@ -10,6 +10,7 @@ import shop.demo.domain.Member;
 import shop.demo.dto.CartAddDTO;
 import shop.demo.dto.CartDTO;
 import shop.demo.dto.CartItemDTO;
+import shop.demo.exception.ItemAlreadyInCartException;
 import shop.demo.repository.CartRepository;
 import shop.demo.repository.ItemRepository;
 import shop.demo.repository.MemberRepository;
@@ -30,6 +31,12 @@ public class CartService {
 
 
     public Long addCart(Long MemberID, CartAddDTO cartAddDTO){
+
+        boolean itemExists = cartRepository.existsByMemberIdAndItemId(MemberID, cartAddDTO.getItemId());
+
+        if (itemExists) {
+            throw new ItemAlreadyInCartException("Item already in cart");
+        }
 
         Member member = memberRepository.findOne(MemberID);
         Item item = itemRepository.findItemById(cartAddDTO.getItemId());
@@ -71,7 +78,7 @@ public class CartService {
             cartItemDTO.setName(cart.getItem().getName());
             cartItemDTO.setPrice(cart.getItem().getPrice());
             cartItemDTO.setCategory(cart.getItem().getCategory());
-            cartItemDTO.setImageUrl(cart.getItem().getImageUrl());
+            cartItemDTO.setImageUrl(cart.getItem().getImagePath());
             cartDTO.setCartItemDTO(cartItemDTO);
 
             cartDTO.setQuantity(cart.getQuantity());
@@ -87,6 +94,15 @@ public class CartService {
 
     public List<Long> getUserCartIds(Long memberId) {
         return cartRepository.findCartIdsByMemberId(memberId);
+    }
+
+    @Transactional
+    public void updateCartQuantity(Long memberId, Long itemId, Long newQuantity) {
+        cartRepository.updateCartQuantity(memberId, itemId, newQuantity);
+    }
+
+    public Long findCartIdByMemberIdAndItemId(Long memberId, Long itemId) {
+        return cartRepository.findCartIdByMemberIdAndItemId(memberId, itemId);
     }
 
 

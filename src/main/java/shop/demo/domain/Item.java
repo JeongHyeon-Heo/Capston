@@ -31,8 +31,8 @@ public class Item {
     @Enumerated(EnumType.STRING)
     private Category category; //카테고리
 
-    @Column(name = "image_url")
-    private String imageUrl; //이미지
+    @Column(name = "image_path")
+    private String imagePath; //이미지
 
 
     //주문된 상품들
@@ -43,8 +43,7 @@ public class Item {
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
     private List<Cart> carts = new ArrayList<>();
 
-
-    //재고 추가 => 품절관리 코드 추가시 크게 사용할 필요가 없어서 일단 주석처리.
+    //재고 추가
     public void addStock(int quantity){
         this.stockQuantity += quantity;
     }
