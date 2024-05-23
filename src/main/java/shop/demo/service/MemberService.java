@@ -91,4 +91,8 @@ public class MemberService {
         memberRepository.save(member);
 
     }
+
+    public String getMemberAddress(Long memberId){
+        return memberRepository.findAddressByMemberId(memberId);
+    }
 }

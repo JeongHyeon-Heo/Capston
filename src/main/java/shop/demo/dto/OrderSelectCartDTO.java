@@ -12,5 +12,6 @@ import java.util.List;
 @AllArgsConstructor
 public class OrderSelectCartDTO {
     private Long cardnum;
+    private String address;
     private List<CartAddDTO> cartAddDTOS;
 }
