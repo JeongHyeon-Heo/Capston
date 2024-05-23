@@ -1,3 +1,4 @@
+
 package shop.demo;
 
 
@@ -24,6 +25,7 @@ import java.util.List;
  * 	 * SPRING1 BOOK
  * 	 * SPRING2 BOOK
  */
+
 @Component
 @RequiredArgsConstructor
 public class InitDb {
@@ -45,6 +47,8 @@ public class InitDb {
         private final PasswordEncoder passwordEncoder;
         public void dbInit1() {
             System.out.println("Init1" + this.getClass());
+            Member admin = createADMIN(createTestAdminDTO(),passwordEncoder);
+            em.persist(admin);
             Member member = Member.createMember(createTestMemberDTO(), passwordEncoder);
             em.persist(member);
 
@@ -89,7 +93,27 @@ public class InitDb {
             em.persist(order2);
         }
 
+        public Member createADMIN(MemberDTO memberFormDto, PasswordEncoder passwordEncoder ) {
+            Member member = new Member();
+            member.setName(memberFormDto.getName());
+            member.setEmail(memberFormDto.getEmail());
+            member.setAddress(memberFormDto.getAddress());
+            member.setRegistrationDate(LocalDateTime.now());
+            String password =  passwordEncoder.encode(memberFormDto.getPassword());
+            member.setPassword(password);
+            member.setRole(Role.ROLE_ADMIN); // 계정 생성 시 권한을 USER으로 고정
 
+            return member;
+        }
+        public MemberDTO createTestAdminDTO() {
+            MemberDTO memberDTO = new MemberDTO();
+            memberDTO.setName("ADMIN");
+            memberDTO.setEmail("admin@hansung.ac.kr");
+            memberDTO.setPassword("admin1234");
+            memberDTO.setAddress("Test Address");
+            memberDTO.setDate(LocalDateTime.now());
+            return memberDTO;
+        }
 
         public Member createADMIN(MemberDTO memberFormDto, PasswordEncoder passwordEncoder ) {
             Member member = new Member();
@@ -153,6 +177,6 @@ public class InitDb {
 
 
 
-    }
+}
 }
 
