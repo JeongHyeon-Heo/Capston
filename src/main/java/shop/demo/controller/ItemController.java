@@ -51,7 +51,7 @@ public class ItemController {
     }
 
     //상품 업데이트
-    @PutMapping("/{itemId}")
+    @PutMapping("/update/{itemId}")
     public ResponseEntity<String> updateItem(@PathVariable Long itemId, @RequestBody ItemDTO newItemDTO) {
         itemService.updateItem(itemId, newItemDTO);
         return ResponseEntity.ok("상품이 업데이트되었습니다.");
@@ -68,7 +68,7 @@ public class ItemController {
     }
 
     //상품 삭제
-    @DeleteMapping("/{itemId}")
+    @DeleteMapping("/delete/{itemId}")
     public ResponseEntity<String> deleteItem(@PathVariable Long itemId) {
         if (itemService.deleteItem(itemId)) {
             return ResponseEntity.ok("상품이 삭제되었습니다.");
@@ -77,4 +77,3 @@ public class ItemController {
         }
     }
 }
-
