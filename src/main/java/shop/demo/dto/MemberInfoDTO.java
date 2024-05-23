@@ -14,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public class MemberInfoDTO {
 
+    private Long id;
     private String name;
     private String email;
     private String address;

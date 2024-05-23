@@ -71,7 +71,7 @@ public class Order {
         for (OrderItem orderItem : orderItems) {
             order.addOrderItem(orderItem);
         }
-        order.setOrderState(OrderState.SHIPPED);
+        order.setOrderState(OrderState.PREPARING);
         order.setDate(LocalDateTime.now());
         return order;
     }

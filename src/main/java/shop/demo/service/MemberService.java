@@ -21,7 +21,6 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
 
     /* 추가 5.19 MemberController에서 id조회시 카트와 오더를 받기 위함 */
-    private final CartService cartService;
     private final OrderService orderService;
     /* 수정 */
 
@@ -54,6 +53,7 @@ public class MemberService {
             memberInfoDTO.setOrderDTOS(orderDTOS);
             /* 5.19 수정 */
 
+            memberInfoDTO.setId(member.getId());
             memberInfoDTO.setName(member.getName());
             memberInfoDTO.setEmail(member.getEmail());
             memberInfoDTO.setAddress(member.getAddress());
@@ -71,10 +71,14 @@ public class MemberService {
     }
 
     @Transactional
-    public boolean deleteMemberById(Long id) {
+    public boolean deleteMemberById(Long id, String inputEmail, String inputPassword) {
         if (memberRepository.existsById(id)) {
-            memberRepository.deleteById(id);
-            return true;
+            Member member = memberRepository.findOne(id);
+
+            if (member.getEmail().equals(inputEmail) && passwordEncoder.matches(inputPassword, member.getPassword()))  {
+                memberRepository.deleteById(id);
+                return true;
+            }
         }
         return false;
     }

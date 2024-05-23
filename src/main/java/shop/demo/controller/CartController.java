@@ -27,6 +27,7 @@ public class CartController {
 
     private final CartService cartService;
 
+    //현재 맴버의 카트를 모두 조회
     @GetMapping("/viewAll")
     public ResponseEntity<List<CartDTO>> viewAllCart(@AuthenticationPrincipal UserDetails userDetails) {
 
@@ -37,6 +38,7 @@ public class CartController {
         return ResponseEntity.ok(cartDTOs);
     }
 
+    //선택한 아이템을 카트에 추가
     @PostMapping("/add")
     public ResponseEntity<Object> addCart(@AuthenticationPrincipal UserDetails userDetails,
                                         @RequestBody CartAddDTO cartAddDTO) {
@@ -51,6 +53,7 @@ public class CartController {
 
     }
 
+    //카트에 있는 아이템의 수량을 조절
     @PutMapping("/quantity")
     public ResponseEntity<String> updateCartQuantity(@AuthenticationPrincipal UserDetails userDetails,
                                                      @RequestBody CartAddDTO cartAddDTO) {
@@ -65,6 +68,7 @@ public class CartController {
         }
     }
 
+    //카트에 있는 아이템을 삭제
     @DeleteMapping("/delete/{itemId}")
     public ResponseEntity<Void> deleteCart(@AuthenticationPrincipal UserDetails userDetails,
                                            @PathVariable Long itemId) {
@@ -83,6 +87,7 @@ public class CartController {
         }
     }
 
+    //카트에 있는 내용을 모두 삭제
     @DeleteMapping("/deleteAll")
     public ResponseEntity<Void> deleteAllCart(@AuthenticationPrincipal UserDetails userDetails) {
         Member member = cartService.findMemberByEmail(userDetails.getUsername());

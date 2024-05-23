@@ -23,6 +23,7 @@ public class OrderController {
 
     private final OrderService orderService;
 
+    //현재 멤버의 오더 조회
     @GetMapping("/member")
     public ResponseEntity<List<OrderDTO>> getOrdersByMemberId(@AuthenticationPrincipal UserDetails userDetails) {
         Member member = orderService.findMemberByEmail(userDetails.getUsername());
@@ -31,6 +32,7 @@ public class OrderController {
         return ResponseEntity.ok(orderDTOs);
     }
 
+    //현재 멤버의 카트에 있는 내용을 모두 오더에 추가
     @PostMapping("/add")
     public ResponseEntity<Long> addOrderFromCart(@AuthenticationPrincipal UserDetails userDetails,
                                                  @RequestBody OrderCardDTO orderCardDTO) {
@@ -39,6 +41,8 @@ public class OrderController {
         Long orderId = orderService.addorderfromcart(memberId, orderCardDTO.getCardnum());
         return ResponseEntity.ok(orderId);
     }
+
+    //현재 맴버가 선택한 아이템을 오더에 추가
     @PostMapping("/addselectcart")
     public ResponseEntity<Long> addOrderSelectCart(@AuthenticationPrincipal UserDetails userDetails,
                                                    @RequestBody OrderSelectCartDTO orderSelectCartDTO) {
@@ -48,16 +52,17 @@ public class OrderController {
         return ResponseEntity.ok(orderId);
     }
 
-    @PutMapping("/cancel/{orderid}")
+    //선택한 오더를 취소
+    @PutMapping("/cancel/{orderId}")
     public ResponseEntity<String> cancelOrder(@AuthenticationPrincipal UserDetails userDetails,
-                                              @PathVariable Long orderid) {
+                                              @PathVariable Long orderId) {
         Member member = orderService.findMemberByEmail(userDetails.getUsername());
         Long memberId = member.getId();
         List<Long> orderIds = orderService.getOrderIdsByMemberId(memberId);
         // 요청된 orderId가 현재 사용자의 오더 아이디 목록에 포함되어 있는지 확인합니다.
-        if (orderIds.contains(orderid)) {
+        if (orderIds.contains(orderId)) {
             // 현재 사용자의 오더이므로 삭제합니다.
-            orderService.cancelOrder(orderid);
+            orderService.cancelOrder(orderId);
             return ResponseEntity.ok("Order cancelled successfully");
         } else {
             // 요청된 orderId가 현재 사용자의 것이 아니므로 삭제 권한이 없음을 알립니다.
@@ -65,18 +70,19 @@ public class OrderController {
         }
     }
 
-    @DeleteMapping("/remove/{orderid}")
+    //선택한 오더를 삭제
+    @DeleteMapping("/remove/{orderId}")
     public ResponseEntity<Void> removeOrder(@AuthenticationPrincipal UserDetails userDetails,
-                                            @PathVariable Long orderid) {
+                                            @PathVariable Long orderId) {
 
         Member member = orderService.findMemberByEmail(userDetails.getUsername());
         Long memberId = member.getId();
         List<Long> orderIds = orderService.getOrderIdsByMemberId(memberId);
 
         // 요청된 orderId가 현재 사용자의 오더 아이디 목록에 포함되어 있는지 확인합니다.
-        if (orderIds.contains(orderid)) {
+        if (orderIds.contains(orderId)) {
             // 현재 사용자의 오더이므로 삭제합니다.
-            orderService.removeOrder(orderid);
+            orderService.removeOrder(orderId);
             return ResponseEntity.noContent().build();
         } else {
             // 요청된 orderId가 현재 사용자의 것이 아니므로 삭제 권한이 없음을 알립니다.
