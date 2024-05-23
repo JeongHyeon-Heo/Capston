@@ -43,12 +43,13 @@ public class OrderController {
     }
 
     //현재 맴버가 선택한 아이템을 오더에 추가
-    @PostMapping("/addselectcart")
-    public ResponseEntity<Long> addOrderSelectCart(@AuthenticationPrincipal UserDetails userDetails,
-                                                   @RequestBody OrderSelectCartDTO orderSelectCartDTO) {
+    @PostMapping("/addselect")
+    public ResponseEntity<Long> addOrderSelect(@AuthenticationPrincipal UserDetails userDetails,
+                                               @RequestBody OrderSelectCartDTO orderSelectCartDTO) {
         Member member = orderService.findMemberByEmail(userDetails.getUsername());
         Long memberId = member.getId();
-        Long orderId = orderService.addOrderFromSelectCart(memberId, orderSelectCartDTO.getCardnum(), orderSelectCartDTO.getCartAddDTOS());
+        Long orderId = orderService.addOrderFromSelectCart(
+                memberId, orderSelectCartDTO.getCardnum(), orderSelectCartDTO.getAddress(), orderSelectCartDTO.getCartAddDTOS());
         return ResponseEntity.ok(orderId);
     }
 

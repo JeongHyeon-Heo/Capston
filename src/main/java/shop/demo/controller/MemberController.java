@@ -101,6 +101,14 @@ public class MemberController {
         return ResponseEntity.ok("주소 업데이트.");
     }
     /* 주소 수정 */
+
+    @GetMapping("/address")
+    public ResponseEntity<String> getAddress(@AuthenticationPrincipal UserDetails userDetails){
+        Member member = memberService.findMemberByEmail(userDetails.getUsername());
+        Long memberId = member.getId();
+        String address = memberService.getMemberAddress(memberId);
+        return ResponseEntity.ok(address);
+    }
 }
 
 

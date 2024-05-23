@@ -67,5 +67,11 @@ public class MemberRepository {
             return false;
         }
     }
+
+    public String findAddressByMemberId(Long memberId) {
+        return em.createQuery("SELECT m.address FROM Member m WHERE m.id = :memberId", String.class)
+                .setParameter("memberId", memberId)
+                .getSingleResult();
+    }
 }
 
