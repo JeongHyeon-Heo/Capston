@@ -63,7 +63,8 @@ public class MemberController {
     /* 유저를 삭제하면 해당 카트, 주문도 삭제됨. */
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteMember(@AuthenticationPrincipal UserDetails userDetails,
-                                             @PathVariable Long id) {
+                                             @PathVariable Long id,
+                                             @RequestBody MemberDeleteDTO memberDeleteDTO) {
 
         // 현재 인증된 사용자의 이메일을 통해 회원정보 가져옴.
         Member member = memberService.findMemberByEmail(userDetails.getUsername());
@@ -77,7 +78,7 @@ public class MemberController {
 
         // 회원을 삭제
         // boolean으로 굳이 안해도 되긴 함. 그냥 이전 작성 코드 때문에 boolean사용
-        boolean deleted = memberService.deleteMemberById(memberId);
+        boolean deleted = memberService.deleteMemberById(memberId, memberDeleteDTO.getEmail(), memberDeleteDTO.getPassword());
         if (deleted)
             return ResponseEntity.noContent().build();
         else
