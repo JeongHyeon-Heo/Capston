@@ -3,22 +3,14 @@ package shop.demo.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
 import shop.demo.domain.Item;
 import shop.demo.domain.Category;
 import shop.demo.domain.ItemStatus;
 import shop.demo.dto.ItemDTO;
 import shop.demo.repository.ItemRepository;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 
@@ -47,7 +39,10 @@ public class ItemService {
     //특정 상품 조회
     public ItemDTO findOne(Long itemId) {
         Item item = itemRepository.findItemById(itemId);
-        return item != null ? convertToDTO(item) : null;
+        if (item == null) {
+            throw new IllegalArgumentException("상품을 찾을 수 없습니다. ID: " + itemId);
+        }
+        return convertToDTO(item);
     }
 
     //카테고리별 상품 조회
@@ -89,6 +84,7 @@ public class ItemService {
                 existingItem.setStockQuantity(newStockQuantity);
                 existingItem.setItemStatus(ItemStatus.AVAILABLE);
             }
+            existingItem.setImagePath(newItemDTO.getImagePath()); //이미지 경로 업데이트
         } else {
             throw new IllegalArgumentException("상품 업데이트에 실패했습니다.");
         }
@@ -112,31 +108,6 @@ public class ItemService {
         return false;
     }
 
-    //상품 이미지 관리
-    public String uploadImage(MultipartFile file) throws IOException {
-        //업로드된 파일 이름에서 공백 제거
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-        //파일명에 UUID 추가하여 중복 방지
-        fileName = UUID.randomUUID() + "_" + fileName;
-
-        String uploadDir = "src/main/resources/static/images";
-
-        //업로드될 디렉토리가 없는 경우 생성
-        File directory = new File(uploadDir);
-        if (!directory.exists()) {
-            directory.mkdirs();
-        }
-
-        //파일 저장
-        Path filePath = Paths.get(uploadDir).resolve(fileName);
-        try (OutputStream outputStream = new FileOutputStream(filePath.toString())) {
-            outputStream.write(file.getBytes());
-        }
-
-        //이미지 URL 반환
-        return "/images/" + fileName;
-    }
-
     //ItemDTO를 Item으로 변환하는 메서드
     private Item convertToItem(ItemDTO itemDTO) {
         Item item = new Item();
@@ -144,6 +115,7 @@ public class ItemService {
         item.setPrice(itemDTO.getPrice());
         item.setStockQuantity(itemDTO.getStockQuantity());
         item.setCategory(itemDTO.getCategory());
+        item.setImagePath(itemDTO.getImagePath());
         return item;
     }
 
@@ -155,6 +127,7 @@ public class ItemService {
         dto.setPrice(item.getPrice());
         dto.setStockQuantity(item.getStockQuantity());
         dto.setCategory(item.getCategory());
+        dto.setImagePath(item.getImagePath());
         return dto;
     }
 

@@ -1,15 +1,12 @@
 package shop.demo.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import shop.demo.dto.ItemDTO;
 import shop.demo.domain.Category;
 import shop.demo.service.ItemService;
 
-import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -77,19 +74,6 @@ public class ItemController {
             return ResponseEntity.ok("상품이 삭제되었습니다.");
         } else {
             return ResponseEntity.notFound().build();
-        }
-    }
-
-    //상품 이미지 업로드
-    @PostMapping("/uploadImage")
-    public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file) {
-        try {
-            //이미지를 서버에 저장, 해당 이미지 URL을 반환하는 메서드 호출
-            String imageUrl = itemService.uploadImage(file);
-            return ResponseEntity.ok(imageUrl);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("이미지 업로드에 실패했습니다.");
         }
     }
 }
