@@ -30,10 +30,11 @@ public class MemberController {
             memberService.saveMember(memberDTO);
             return ResponseEntity.ok("회원 추가");
         } catch (IllegalStateException e) {
-            // 이메일 중복 예외 처리
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "다른 이메일로 가입해주세요.", e);
+            // 이메일 중복 예외
+            return new ResponseEntity<>("중복된 이메일입니다.", HttpStatus.CONFLICT);
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "회원 추가중 오류발생", e);
+            // 그외
+            return new ResponseEntity<>("회원 추가 중 오류가 발생했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
    /* @PostMapping("/add")
