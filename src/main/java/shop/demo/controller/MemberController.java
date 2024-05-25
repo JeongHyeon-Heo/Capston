@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import shop.demo.domain.Member;
 import shop.demo.dto.*;
 import shop.demo.service.CartService;
@@ -21,14 +22,25 @@ public class MemberController {
 
     private final MemberService memberService;
     private final OrderService orderService;
-    private final CartService cartService;
 
 
     @PostMapping("/add")
     public ResponseEntity<String> addMember(@RequestBody MemberDTO memberDTO) {
+        try {
+            memberService.saveMember(memberDTO);
+            return ResponseEntity.ok("회원 추가");
+        } catch (IllegalStateException e) {
+            // 이메일 중복 예외 처리
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "다른 이메일로 가입해주세요.", e);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "회원 추가중 오류발생", e);
+        }
+    }
+   /* @PostMapping("/add")
+    public ResponseEntity<String> addMember(@RequestBody MemberDTO memberDTO) {
         memberService.saveMember(memberDTO);
         return ResponseEntity.ok("회원 추가");
-    }
+    }*/
 
 
     /* 내정보 조회시 카트아이디, 주문아이디 공개 */
