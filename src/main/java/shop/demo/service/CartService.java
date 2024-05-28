@@ -7,9 +7,9 @@ import org.springframework.stereotype.Service;
 import shop.demo.domain.Cart;
 import shop.demo.domain.Item;
 import shop.demo.domain.Member;
-import shop.demo.dto.CartAddDTO;
-import shop.demo.dto.CartDTO;
-import shop.demo.dto.CartItemDTO;
+import shop.demo.dto.cartDTO.CartAddDTO;
+import shop.demo.dto.cartDTO.CartDTO;
+import shop.demo.dto.cartDTO.CartItemDTO;
 import shop.demo.exception.ItemAlreadyInCartException;
 import shop.demo.repository.CartRepository;
 import shop.demo.repository.ItemRepository;
@@ -57,11 +57,6 @@ public class CartService {
         cartRepository.deleteCustomerCart(member);
     }
 
-    /*
-    public List<Cart> ViewAllCart(Long MemberID) {
-        List<Cart> carts =cartRepository.findBymember(MemberID);
-        return carts;
-    }*/
 
     public List<CartDTO> viewAllCart(Long memberId) {
         List<Cart> carts = cartRepository.findBymember(memberId);

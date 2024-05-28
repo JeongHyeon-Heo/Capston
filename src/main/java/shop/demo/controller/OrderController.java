@@ -8,10 +8,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import shop.demo.domain.Member;
-import shop.demo.domain.Order;
-import shop.demo.dto.OrderCardDTO;
-import shop.demo.dto.OrderDTO;
-import shop.demo.dto.OrderSelectCartDTO;
+import shop.demo.dto.orderDTO.OrderCardDTO;
+import shop.demo.dto.orderDTO.OrderDTO;
+import shop.demo.dto.orderDTO.OrderSelectCartDTO;
 import shop.demo.service.OrderService;
 
 import java.util.List;

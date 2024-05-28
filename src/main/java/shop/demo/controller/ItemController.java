@@ -3,7 +3,7 @@ package shop.demo.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import shop.demo.dto.ItemDTO;
+import shop.demo.dto.itemDTO.ItemDTO;
 import shop.demo.domain.Category;
 import shop.demo.service.ItemService;
 

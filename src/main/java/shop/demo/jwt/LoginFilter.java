@@ -13,7 +13,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import shop.demo.domain.Refresh;
-import shop.demo.dto.CustomUserDetails;
 import shop.demo.service.RefreshService;
 
 import java.util.Collection;

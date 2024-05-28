@@ -5,15 +5,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.demo.domain.*;
-import shop.demo.dto.CartAddDTO;
-import shop.demo.dto.OrderDTO;
-import shop.demo.dto.OrderItemDTO;
+import shop.demo.dto.cartDTO.CartAddDTO;
+import shop.demo.dto.orderDTO.OrderDTO;
+import shop.demo.dto.orderDTO.OrderItemDTO;
 import shop.demo.repository.CartRepository;
 import shop.demo.repository.ItemRepository;
 import shop.demo.repository.MemberRepository;
 import shop.demo.repository.OrderRepository;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,25 +27,6 @@ public class OrderService {
     private final ItemRepository itemRepository;
     private final CartRepository cartRepository;
 
-/*
-    public List<Order> viewOrdersByMemberId(Long memberId) {
-        return orderRepository.findByMember(memberId);
-    }*/
-/*
-    public List<OrderDTO> viewOrdersByMemberId(Long memberId) {
-        List<Order> orders = orderRepository.findByMember(memberId);
-        return orders.stream()
-                .map(order -> new OrderDTO(order.getId(),
-                        order.getMember().getId(),
-                        order.getAddress(),
-                        order.getPayment().getId(),
-                        order.getOrderItems().stream()
-                                .map(OrderItem::getId)
-                                .collect(Collectors.toList()),
-                        order.getDate(),
-                        order.getOrderState()))
-                .collect(Collectors.toList());
-    }*/
 
     public List<OrderDTO> viewOrdersByMemberId(Long memberId) {
         List<Order> orders = orderRepository.findByMember(memberId);
@@ -105,7 +85,7 @@ public class OrderService {
 
         //배송정보 생성
         String address = member.getAddress();
-        //Payment payment = createPayment(cardnum,amount);
+
 
         //주문상품 생성
         Order order = Order.createOrder(member, address, cardnum, amount,orderItems);
@@ -115,44 +95,7 @@ public class OrderService {
 
         return order.getId();
     }
-/*
-    @Transactional
-    public Long addorderfromselectcart(Long memberId, Long cardnum, List<Long> cartIds) {
-        Member member = memberRepository.findOne(memberId);
-        List<Cart> carts = new ArrayList<>();
-        for (Long cartId : cartIds) {
-            Cart cart = cartRepository.findById(cartId);
-            if (cart != null && cart.getMember().getId().equals(memberId)) {
-                carts.add(cart);
-            } else {
-                System.out.println("Invalid cart ID: " + cartId);
-            }
-        }
-        List<Item> items = new ArrayList<>();
-        List<OrderItem> orderItems = new ArrayList<>();
-        Long amount= 0L;
-        for (Cart cart : carts) {
-            Item item = cart.getItem();
-            int quantity = (cart.getQuantity()).intValue();
-            amount += item.getPrice()*quantity;
-            OrderItem orderItem = OrderItem.createOrderItem(item, quantity);
-            orderItems.add(orderItem);
-            items.add(item);
-        }
 
-        //배송정보 생성
-        String address = member.getAddress();
-       // Payment payment = createPayment(cardnum,amount);
-
-        //주문상품 생성
-        Order order = Order.createOrder(member, address, cardnum, amount,orderItems);
-
-        //주문 저장
-        orderRepository.save(order);
-
-        return order.getId();
-    }
-*/
     @Transactional
     public Long addOrderFromSelectCart(Long memberId, Long cardnum, String address, List<CartAddDTO> cartItems) {
         Member member = memberRepository.findOne(memberId);
@@ -218,13 +161,5 @@ public class OrderService {
     public Member findMemberByEmail(String email){
         return memberRepository.findByEmail(email);
     }
-/*
-    private Payment createPayment(Long cardnum ,Long amount) {
 
-        Payment payment = new Payment();
-        payment.setCardnumber(cardnum);
-        payment.setAmountpay(amount);
-        payment.setDate(LocalDateTime.now());
-        return payment;
-    }*/
 }

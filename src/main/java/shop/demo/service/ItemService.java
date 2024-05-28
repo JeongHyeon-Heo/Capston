@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import shop.demo.domain.Item;
 import shop.demo.domain.Category;
 import shop.demo.domain.ItemStatus;
-import shop.demo.dto.ItemDTO;
+import shop.demo.dto.itemDTO.ItemDTO;
 import shop.demo.repository.ItemRepository;
 
 

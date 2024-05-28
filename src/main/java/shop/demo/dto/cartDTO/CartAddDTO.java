@@ -1,4 +1,4 @@
-package shop.demo.dto;
+package shop.demo.dto.cartDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import shop.demo.dto.MemberDTO;
+import shop.demo.dto.memberDTO.MemberDTO;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -19,7 +19,6 @@ public class Member {
     @Column(name = "member_id")
     private Long id;
 
-
     private String name;
 
     @Column(unique = true)
@@ -32,10 +31,6 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-/*
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "address_id")
-    private Address address;*/
     private String address;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
@@ -43,18 +38,6 @@ public class Member {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Cart> carts = new ArrayList<>();
-
-    @OneToMany(mappedBy = "member")
-    private List<Notification> notifications = new ArrayList<>();
-
-    @OneToMany(mappedBy = "member")
-    private List<ServiceCenter> serviceCenters = new ArrayList<>();
-
-/*
-    public void setAddress(Address address) {
-        this.address = address;
-        address.setMember(this);
-    }*/
 
 
     public static Member createMember(MemberDTO memberFormDto, PasswordEncoder passwordEncoder ) {
