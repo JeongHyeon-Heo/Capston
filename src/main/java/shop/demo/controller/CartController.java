@@ -1,23 +1,18 @@
 package shop.demo.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-import shop.demo.domain.Cart;
 import shop.demo.domain.Member;
-import shop.demo.dto.CartAddDTO;
-import shop.demo.dto.CartDTO;
+import shop.demo.dto.cartDTO.CartAddDTO;
+import shop.demo.dto.cartDTO.CartDTO;
 import shop.demo.exception.ItemAlreadyInCartException;
 import shop.demo.service.CartService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -38,10 +33,9 @@ public class CartController {
         return ResponseEntity.ok(cartDTOs);
     }
 
-    //선택한 아이템을 카트에 추가
     @PostMapping("/add")
     public ResponseEntity<Object> addCart(@AuthenticationPrincipal UserDetails userDetails,
-                                        @RequestBody CartAddDTO cartAddDTO) {
+                                          @RequestBody CartAddDTO cartAddDTO) {
         Member member = cartService.findMemberByEmail(userDetails.getUsername());
         Long memberId = member.getId();
         try {

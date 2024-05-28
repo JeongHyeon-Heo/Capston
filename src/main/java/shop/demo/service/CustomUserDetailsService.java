@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import shop.demo.domain.Member;
-import shop.demo.dto.CustomUserDetails;
+import shop.demo.jwt.CustomUserDetails;
 import shop.demo.repository.MemberRepository;
 
 @Service
@@ -31,25 +31,3 @@ public class CustomUserDetailsService implements UserDetailsService {
         return null;
     }
 }
-/*
-public class CustomUserDetailService implements UserDetailsService {
-
-    private final MemberRepository memberRepository;
-
-
-    @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-
-        Member member = memberRepository.findByEmail(email);
-
-        if(member == null){
-            throw new UsernameNotFoundException(email);
-        }
-
-        return org.springframework.security.core.userdetails.User.builder()
-                .username(member.getEmail()) // 여기서 username은 이메일로 설정
-                .password(member.getPassword())
-                .roles(String.valueOf(member.getRole()))
-                .build();
-    }
-}*/

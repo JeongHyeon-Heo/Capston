@@ -1,5 +1,4 @@
-package shop.demo.dto;
-
+package shop.demo.dto.cartDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,12 +10,12 @@ import shop.demo.domain.Category;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderItemDTO {
-    private Long id;
-    private Long itemid;
-    private String itemname;
-    private int itemprice;
-    private Category itemcategory;
-    private int quantity;
+public class CartItemDTO {
+
+    private Long itemId;
+    private String name;
+    private int price;
+    private Category category;
     private String imageUrl;
+
 }

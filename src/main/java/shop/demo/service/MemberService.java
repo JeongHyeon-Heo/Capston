@@ -4,14 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import shop.demo.domain.Cart;
 import shop.demo.domain.Member;
-import shop.demo.domain.Order;
-import shop.demo.dto.*;
+import shop.demo.dto.memberDTO.AddressUpdateDTO;
+import shop.demo.dto.memberDTO.MemberDTO;
+import shop.demo.dto.memberDTO.MemberInfoDTO;
+import shop.demo.dto.orderDTO.OrderDTO;
 import shop.demo.repository.MemberRepository;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

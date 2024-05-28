@@ -7,7 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import shop.demo.domain.*;
-import shop.demo.dto.MemberDTO;
+import shop.demo.dto.memberDTO.MemberDTO;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -32,7 +32,6 @@ public class InitDb {
     @PostConstruct
     public void init() {
         initService.dbInit1();
-
     }
 
     @Component
@@ -163,9 +162,6 @@ public class InitDb {
             em.persist(acc11); em.persist(acc12); em.persist(acc13);
 
 
-            Cart cart1 = Cart.createcart(member, top1, 1L);
-            Cart cart2 = Cart.createcart(member, acc4, 1L);
-
             OrderItem orderItem1 = OrderItem.createOrderItem(top1, 1);
             OrderItem orderItem2 = OrderItem.createOrderItem(acc4, 2);
             OrderItem orderItem3 = OrderItem.createOrderItem(top2, 2);
@@ -178,20 +174,6 @@ public class InitDb {
             orderItems2.add(orderItem3);
 
 
-            Address address1 = createAddress(1L, "주소1");
-            String address1_2 = address1.getAddressAsString();
-            Address address2 = createAddress(1L, "주소1");
-            String address2_2 = address2.getAddressAsString();
-            Address address3 = createAddress(1L, "주소1");
-
-            long cardnum = 123456789L;
-            long amountpay = 100000L;
-            Order order1 = Order.createOrder(member, address1_2, cardnum, amountpay, orderItems1);
-            Order order2 = Order.createOrder(member, address2_2, cardnum, amountpay, orderItems2);
-
-
-            em.persist(order1);
-            em.persist(order2);
         }
 
         public Member createADMIN(MemberDTO memberFormDto, PasswordEncoder passwordEncoder) {
@@ -238,20 +220,5 @@ public class InitDb {
             return item;
         }
 
-        private Address createAddress(Long zipcode, String detail) {
-            Address address = new Address();
-            address.setZipcode(zipcode);
-            address.setDetail(detail);
-            return address;
-        }
-/*
-            private Payment createPayment(Long cardnum ,Long amount) {
-
-                Payment payment = new Payment();
-                payment.setCardnumber(cardnum);
-                payment.setAmountpay(amount);
-                payment.setDate(LocalDateTime.now());
-                return payment;
-            }*/
     }
 }
